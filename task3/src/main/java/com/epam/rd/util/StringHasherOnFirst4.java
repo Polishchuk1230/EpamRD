@@ -19,4 +19,14 @@ public class StringHasherOnFirst4 {
     public int hashCode() {
         return value.chars().limit(4).sum();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StringHasherOnFirst4)) {
+            return false;
+        }
+        StringHasherOnFirst4 that = (StringHasherOnFirst4) o;
+        return value.equals(that.value);
+    }
 }
