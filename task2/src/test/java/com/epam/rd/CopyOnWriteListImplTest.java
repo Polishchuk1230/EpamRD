@@ -1,7 +1,7 @@
 package com.epam.rd;
 
 import com.epam.rd.container.CopyOnWriteListImpl;
-import com.epam.rd.pojo.Furniture;
+import com.epam.rd.pojo.Product;
 import com.epam.rd.pojo.GamingChair;
 import com.epam.rd.pojo.RockingChair;
 import org.junit.Assert;
@@ -18,10 +18,10 @@ import java.util.concurrent.TimeUnit;
 public class CopyOnWriteListImplTest {
     @Test
     public void addAllTest() {
-        Furniture chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
-        Furniture chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
-        Furniture chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
-        CopyOnWriteListImpl<Furniture> listImpl = new CopyOnWriteListImpl<>();
+        Product chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
+        Product chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
+        Product chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
+        CopyOnWriteListImpl<Product> listImpl = new CopyOnWriteListImpl<>();
 
         Assert.assertFalse(
                 listImpl.addAll(
@@ -35,24 +35,24 @@ public class CopyOnWriteListImplTest {
                 listImpl.addAll(
                         List.of(chair3, chair2)));
 
-        Furniture[] expected = {chair1, chair2, chair3, chair3, chair2};
+        Product[] expected = {chair1, chair2, chair3, chair3, chair2};
         Assert.assertArrayEquals(expected, listImpl.toArray());
     }
 
     @Test(expected = NullPointerException.class)
     public void addAllWhenCollectionContainsNullElement() {
-        CopyOnWriteListImpl<Furniture> list = new CopyOnWriteListImpl<>();
-        ArrayList<Furniture> tempCollection = new ArrayList<>();
+        CopyOnWriteListImpl<Product> list = new CopyOnWriteListImpl<>();
+        ArrayList<Product> tempCollection = new ArrayList<>();
         tempCollection.add(null);
         list.addAll(tempCollection);
     }
 
     @Test
     public void addAllByIndexTest() {
-        Furniture chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
-        Furniture chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
-        Furniture chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
-        CopyOnWriteListImpl<Furniture> listImpl = new CopyOnWriteListImpl<>();
+        Product chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
+        Product chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
+        Product chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
+        CopyOnWriteListImpl<Product> listImpl = new CopyOnWriteListImpl<>();
 
         Assert.assertFalse(
                 listImpl.addAll(0,
@@ -66,57 +66,57 @@ public class CopyOnWriteListImplTest {
                 listImpl.addAll(1,
                         List.of(chair3, chair3, chair3)));
 
-        Furniture[] expected = {chair1, chair3, chair3, chair3, chair2};
+        Product[] expected = {chair1, chair3, chair3, chair3, chair2};
 
         Assert.assertArrayEquals(expected, listImpl.toArray());
     }
 
     @Test
     public void addTest() {
-        Furniture chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
-        Furniture chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
-        CopyOnWriteListImpl<Furniture> listImpl = new CopyOnWriteListImpl<>();
+        Product chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
+        Product chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
+        CopyOnWriteListImpl<Product> listImpl = new CopyOnWriteListImpl<>();
 
         listImpl.add(chair1);
         listImpl.add(chair2);
 
-        Furniture[] expected = {chair1, chair2};
+        Product[] expected = {chair1, chair2};
         Assert.assertArrayEquals(expected, listImpl.toArray());
     }
 
     @Test(expected = NullPointerException.class)
     public void addWhenParameterIsNullTest() {
-        CopyOnWriteListImpl<Furniture> listImpl = new CopyOnWriteListImpl<>();
+        CopyOnWriteListImpl<Product> listImpl = new CopyOnWriteListImpl<>();
         listImpl.add(null);
     }
 
     @Test
     public void addByIndexTest() {
-        Furniture chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
-        Furniture chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
-        Furniture chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
-        CopyOnWriteListImpl<Furniture> listImpl = new CopyOnWriteListImpl<>();
+        Product chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
+        Product chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
+        Product chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
+        CopyOnWriteListImpl<Product> listImpl = new CopyOnWriteListImpl<>();
 
         listImpl.add(0, chair1);
         listImpl.add(1, chair3);
         listImpl.add(1, chair2);
 
-        Furniture[] expected = {chair1, chair2, chair3};
+        Product[] expected = {chair1, chair2, chair3};
         Assert.assertArrayEquals(expected, listImpl.toArray());
     }
 
     @Test(expected = NullPointerException.class)
     public void addByIndexWhenElementIsNullTest() {
-        CopyOnWriteListImpl<Furniture> listImpl = new CopyOnWriteListImpl<>();
+        CopyOnWriteListImpl<Product> listImpl = new CopyOnWriteListImpl<>();
         listImpl.add(0, null);
     }
 
     @Test
     public void getTest() {
-        Furniture chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
-        Furniture chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
-        Furniture chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
-        CopyOnWriteListImpl<Furniture> listImpl = new CopyOnWriteListImpl<>();
+        Product chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
+        Product chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
+        Product chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
+        CopyOnWriteListImpl<Product> listImpl = new CopyOnWriteListImpl<>();
         listImpl.addAll(
                 List.of(chair1, chair2, chair3));
 
@@ -126,39 +126,39 @@ public class CopyOnWriteListImplTest {
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void getWhenIndexIsInvalidTest() {
-        Furniture chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
-        CopyOnWriteListImpl<Furniture> listImpl = new CopyOnWriteListImpl<>();
+        Product chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
+        CopyOnWriteListImpl<Product> listImpl = new CopyOnWriteListImpl<>();
         listImpl.add(chair1);
         listImpl.get(1);
     }
 
     @Test
     public void removeByIndexTest() {
-        Furniture chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
-        Furniture chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
-        Furniture chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
-        CopyOnWriteListImpl<Furniture> listImpl = new CopyOnWriteListImpl<>();
+        Product chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
+        Product chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
+        Product chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
+        CopyOnWriteListImpl<Product> listImpl = new CopyOnWriteListImpl<>();
         listImpl.addAll(
                 List.of(chair1, chair2, chair3));
 
         listImpl.remove(1);
 
-        Furniture[] expected = {chair1, chair3};
+        Product[] expected = {chair1, chair3};
         Assert.assertArrayEquals(expected, listImpl.toArray());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void removeByIndexWhenIndexIsInvalidTest() {
-        CopyOnWriteListImpl<Furniture> listImpl = new CopyOnWriteListImpl<>();
+        CopyOnWriteListImpl<Product> listImpl = new CopyOnWriteListImpl<>();
         listImpl.get(0);
     }
 
     @Test
     public void removeByObjectTest() {
-        Furniture chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
-        Furniture chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
-        Furniture chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
-        CopyOnWriteListImpl<Furniture> listImpl = new CopyOnWriteListImpl<>();
+        Product chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
+        Product chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
+        Product chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
+        CopyOnWriteListImpl<Product> listImpl = new CopyOnWriteListImpl<>();
         listImpl.addAll(
                 List.of(chair1, chair2));
 
@@ -168,20 +168,20 @@ public class CopyOnWriteListImplTest {
         Assert.assertFalse(
                 listImpl.remove(chair3));
 
-        Furniture[] expected = {chair1};
+        Product[] expected = {chair1};
         Assert.assertArrayEquals(expected, listImpl.toArray());
     }
 
     @Test
     public void iteratorWithFilterTest() {
-        Furniture chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
-        Furniture chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
-        Furniture chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
-        CopyOnWriteListImpl<Furniture> listImpl = new CopyOnWriteListImpl<>();
+        Product chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
+        Product chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
+        Product chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
+        CopyOnWriteListImpl<Product> listImpl = new CopyOnWriteListImpl<>();
         listImpl.addAll(
                 List.of(chair1, chair2, chair3));
 
-        Iterator<Furniture> iterator =
+        Iterator<Product> iterator =
                 listImpl.filterIterator(
                         item -> item.getPrice() >= 400);
 
@@ -199,17 +199,17 @@ public class CopyOnWriteListImplTest {
 
     @Test
     public void iteratorConcurrentTest() {
-        Furniture chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
-        Furniture chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
-        Furniture chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
-        CopyOnWriteListImpl<Furniture> list = new CopyOnWriteListImpl<>();
+        Product chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
+        Product chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
+        Product chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
+        CopyOnWriteListImpl<Product> list = new CopyOnWriteListImpl<>();
         list.addAll(
                 Arrays.asList(chair1, chair2, chair3));
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         for (int i = 0; i < 25; i++) {
             executorService.execute(
                     () -> {
-                        Iterator<Furniture> iterator;
+                        Iterator<Product> iterator;
                         synchronized (list) {
                             list.remove(1); // 1 3
                             list.add(2, chair2); // 1 3 2
@@ -238,17 +238,17 @@ public class CopyOnWriteListImplTest {
 
     @Test
     public void retainAllTest() {
-        Furniture chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
-        Furniture chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
-        Furniture chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
-        CopyOnWriteListImpl<Furniture> list = new CopyOnWriteListImpl<>();
+        Product chair1 = new GamingChair("ASUS Super model", 100000, 120, true, true);
+        Product chair2 = new GamingChair("HomeMade not super model", 400, 75, true, false);
+        Product chair3 = new RockingChair("Uncle Sam model", 399.99, 80, 35);
+        CopyOnWriteListImpl<Product> list = new CopyOnWriteListImpl<>();
         list.addAll(
                 Arrays.asList(chair1, chair2, chair3));
         Assert.assertTrue(
                 list.retainAll(
                         Arrays.asList(chair1, chair3)));
 
-        Furniture[] expected = {chair1, chair3};
+        Product[] expected = {chair1, chair3};
         Assert.assertArrayEquals(expected, list.toArray());
     }
 }

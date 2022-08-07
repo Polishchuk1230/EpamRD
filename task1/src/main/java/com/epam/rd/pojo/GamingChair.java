@@ -13,6 +13,12 @@ public class GamingChair extends Chair {
         this.headrest = headrest;
     }
 
+    public GamingChair(int id, String name, double price, int maxWeight, boolean arms, boolean headrest) {
+        super(id, name, price, maxWeight);
+        this.arms = arms;
+        this.headrest = headrest;
+    }
+
     public boolean isArms() {
         return arms;
     }
@@ -32,7 +38,8 @@ public class GamingChair extends Chair {
     @Override
     public String toString() {
         return "GamingChair{" +
-                "arms=" + arms +
+                "id=" + this.getId() +
+                ", arms=" + arms +
                 ", headrest=" + headrest +
                 ", maxWeight=" + this.getMaxWeight() +
                 ", name='" + this.getName() + '\'' +

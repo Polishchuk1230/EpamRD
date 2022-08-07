@@ -2,13 +2,18 @@ package com.epam.rd.pojo;
 
 import java.util.Objects;
 
-public class Chair extends Furniture {
+public class Chair extends Product {
     private int maxWeight;
 
     public Chair() {}
     public Chair(String name, double price, int maxWeight) {
         super(name, price);
         this.setMaxWeight(maxWeight);
+    }
+
+    public Chair(int id, String name, double price, int maxWeight) {
+        super(id, name, price);
+        this.maxWeight = maxWeight;
     }
 
     public int getMaxWeight() {

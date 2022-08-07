@@ -10,6 +10,10 @@ public class RockingChair extends Chair {
         super(name, price, maxWeight);
         this.maxRockingAmplitude = maxRockingAmplitude;
     }
+    public RockingChair(int id, String name, double price, int maxWeight, int maxRockingAmplitude) {
+        super(id, name, price, maxWeight);
+        this.maxRockingAmplitude = maxRockingAmplitude;
+    }
 
     public int getMaxRockingAmplitude() {
         return maxRockingAmplitude;
@@ -22,7 +26,8 @@ public class RockingChair extends Chair {
     @Override
     public String toString() {
         return "RockingChair{" +
-                "maxRockingAmplitude=" + maxRockingAmplitude +
+                "id=" + this.getId() +
+                ", maxRockingAmplitude=" + maxRockingAmplitude +
                 ", maxWeight=" + this.getMaxWeight() +
                 ", name='" + this.getName() + '\'' +
                 ", price=" + this.getPrice() +
