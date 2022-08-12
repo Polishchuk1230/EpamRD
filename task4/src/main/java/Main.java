@@ -1,5 +1,9 @@
 import com.epam.rd.controller.Controller;
 import com.epam.rd.controller.IController;
+import com.epam.rd.pojo.GamingChair;
+import com.epam.rd.pojo.RockingChair;
+import com.epam.rd.context.ApplicationContext;
+import com.epam.rd.util.Reflection;
 
 import java.util.Scanner;
 
@@ -27,11 +31,23 @@ public class Main {
                 "\n[displays the closest order after the provided date]\n\n" +
 
                 "order list --period dd.MM.yyyy - dd.MM.yyyy" +
-                "\n[displays the information about all the orders between two date points]";
+                "\n[displays the information about all the orders between two date points]\n\n";
         System.out.println(startInfo);
-        IController controller = new Controller();
         Scanner sc = new Scanner(System.in);
-        while (sc.hasNextLine()) {
+
+        // choose random\handle way to fill parameters of new products
+        System.out.println("Do you prefer to fill product parameters randomly? Type: true. Handle way otherwise.");
+        boolean randomInput = sc.nextLine().equals("true");
+        if (randomInput) {
+            System.out.println("You have chose random way. Use:\nproduct add -t PRODUCT_TYPE");
+        } else {
+            System.out.println("You have chose handle way. Use the following templates:" +
+                    "\nproduct add -t GamingChair --parameters " + Reflection.getTypedFieldsAsString(GamingChair.class, "id") +
+                    "\nproduct add -t RockingChair --parameters " + Reflection.getTypedFieldsAsString(RockingChair.class, "id"));
+        }
+
+        IController controller = new Controller(randomInput);
+        while ((boolean) ApplicationContext.getInstance().find("running") && sc.hasNextLine()) {
             System.out.println(controller.processRequest(sc.nextLine()));
         }
     }

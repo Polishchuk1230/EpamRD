@@ -24,4 +24,9 @@ public class ProductService implements IProductService {
     public Product findById(int id) {
         return productDao.findById(id);
     }
+
+    @Override
+    public boolean add(Product product) {
+        return productDao.add(product);
+    }
 }

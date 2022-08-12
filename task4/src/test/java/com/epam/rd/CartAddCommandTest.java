@@ -6,7 +6,7 @@ import com.epam.rd.pojo.GamingChair;
 import com.epam.rd.pojo.RockingChair;
 import com.epam.rd.service.impl.CartService;
 import com.epam.rd.service.impl.ProductService;
-import com.epam.rd.util.ApplicationContext;
+import com.epam.rd.context.ApplicationContext;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;

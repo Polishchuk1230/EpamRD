@@ -4,7 +4,7 @@ import com.epam.rd.command.ICommand;
 import com.epam.rd.entity.Order;
 import com.epam.rd.service.IOrderService;
 import com.epam.rd.service.impl.OrderService;
-import com.epam.rd.util.ApplicationContext;
+import com.epam.rd.context.ApplicationContext;
 import com.epam.rd.entity.OrderItem;
 
 import java.time.LocalDateTime;

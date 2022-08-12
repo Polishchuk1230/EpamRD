@@ -7,7 +7,7 @@ import com.epam.rd.service.ICartService;
 import com.epam.rd.service.IOrderService;
 import com.epam.rd.service.impl.CartService;
 import com.epam.rd.service.impl.OrderService;
-import com.epam.rd.util.ApplicationContext;
+import com.epam.rd.context.ApplicationContext;
 
 public class OrderCreateCommand implements ICommand {
     private IOrderService orderService = (OrderService) ApplicationContext.getInstance().find("orderService");

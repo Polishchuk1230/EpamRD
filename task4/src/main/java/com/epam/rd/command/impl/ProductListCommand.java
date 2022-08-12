@@ -3,7 +3,7 @@ package com.epam.rd.command.impl;
 import com.epam.rd.command.ICommand;
 import com.epam.rd.service.IProductService;
 import com.epam.rd.service.impl.ProductService;
-import com.epam.rd.util.ApplicationContext;
+import com.epam.rd.context.ApplicationContext;
 
 public class ProductListCommand implements ICommand {
     private IProductService productService = (ProductService) ApplicationContext.getInstance().find("productService");

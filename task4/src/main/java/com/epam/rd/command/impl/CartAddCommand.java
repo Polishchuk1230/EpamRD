@@ -6,7 +6,7 @@ import com.epam.rd.service.ICartService;
 import com.epam.rd.service.IProductService;
 import com.epam.rd.service.impl.CartService;
 import com.epam.rd.service.impl.ProductService;
-import com.epam.rd.util.ApplicationContext;
+import com.epam.rd.context.ApplicationContext;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
