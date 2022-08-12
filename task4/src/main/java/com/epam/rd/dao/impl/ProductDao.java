@@ -1,19 +1,21 @@
 package com.epam.rd.dao.impl;
 
-import com.epam.rd.dao.IProductDao;
+import com.epam.rd.dao.IProductDaoFile;
 import com.epam.rd.pojo.Product;
-import com.epam.rd.pojo.GamingChair;
-import com.epam.rd.pojo.RockingChair;
+import com.epam.rd.util.Serializer;
 
 import java.util.*;
 
-public class ProductDao implements IProductDao {
-    Map<Integer, Product> map = new HashMap<>();
+public class ProductDao implements IProductDaoFile {
 
-    {
-        map.put(1, new GamingChair(1, "ASUS Super model", 100000, 120, true, true));
-        map.put(2, new GamingChair(2,"HomeMade not super model", 400, 75, true, false));
-        map.put(3, new RockingChair(3, "Uncle Sam model", 399.99, 80, 35));
+    private static final String STORAGE_PATH = "task4/src/main/resources/product_storage.ser";
+    private int generatedId;
+    Map<Integer, Product> map;
+
+    public ProductDao() {
+        HashMap<Integer, Product> storage = Serializer.deserialize(STORAGE_PATH);
+        map = storage != null ? storage : new HashMap<>();
+        generatedId = ProductDao.findMaxKey(map) + 1;
     }
 
     @Override
@@ -24,5 +26,31 @@ public class ProductDao implements IProductDao {
     @Override
     public Product findById(int id) {
         return map.get(id);
+    }
+
+    @Override
+    public boolean add(Product product) {
+        if (product.getId() == 0) {
+            product.setId(generatedId++);
+        } else if (product.getId() >= generatedId) {
+            generatedId = product.getId() + 1;
+        }
+        map.put(product.getId(), product);
+        return true;
+    }
+
+    @Override
+    public void saveData() {
+        Serializer.serialize((HashMap<Integer, Product>) map, STORAGE_PATH);
+    }
+
+    private static int findMaxKey(Map<Integer, ?> map) {
+        int result = 0;
+        for (Integer i : map.keySet()) {
+            if (result < i) {
+                result = i;
+            }
+        }
+        return result;
     }
 }

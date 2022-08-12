@@ -1,4 +1,4 @@
-package com.epam.rd.util;
+package com.epam.rd.context;
 
 import com.epam.rd.dao.impl.CartDao;
 import com.epam.rd.dao.impl.OrderDao;
@@ -18,13 +18,16 @@ public class ApplicationContext {
     private final HashMap<String, Object> context = new HashMap<>();
 
     private ApplicationContext() {
-        ProductService productService = new ProductService(new ProductDao());
+        ProductDao productDao = new ProductDao();
+        ProductService productService = new ProductService(productDao);
         CartService cartService = new CartService(new CartDao(), productService);
         OrderService orderService = new OrderService(new OrderDao(), productService, cartService);
 
+        put("productDao", productDao);
         put("productService", productService);
         put("cartService", cartService);
         put("orderService", orderService);
+        put("running", true);
     }
 
     public static ApplicationContext getInstance() {

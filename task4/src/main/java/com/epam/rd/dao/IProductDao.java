@@ -10,4 +10,5 @@ import java.util.List;
 public interface IProductDao {
     List<Product> findAll();
     Product findById(int id);
+    boolean add(Product product);
 }
