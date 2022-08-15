@@ -1,8 +1,11 @@
 package com.epam.rd.pojo;
 
+import com.epam.rd.annotation.ProductField;
+
 import java.util.Objects;
 
 public class RockingChair extends Chair {
+    @ProductField(fieldNameEn = "max rocking amplitude", fieldNameUa = "максимальний нахил")
     private int maxRockingAmplitude;
 
     public RockingChair() {}

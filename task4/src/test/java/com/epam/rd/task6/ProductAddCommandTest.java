@@ -20,18 +20,19 @@ public class ProductAddCommandTest {
         expected.add(new RockingChair("Asus super model", 2222.22, 222, 22));
 
         IController controller = new Controller(false);
-        controller.processRequest("product add -t RockingChair --parameters name=\"Asus super model\", price=2222.22, maxWeight=222, maxRockingAmplitude=22");
+        controller.processRequest("product add -t RockingChair --parameters назва=\"Asus super model\", вартість=2222.22, максимальна вага=222, максимальний нахил=22");
 
         List<Product> actual = productDao.findAll();
         Assert.assertEquals(expected, actual);
     }
 
+    @Test
     public void productAddRandomCommandTest() {
         IProductDaoFile productDao = (IProductDaoFile) ApplicationContext.getInstance().find("productDao");
         List<Product> expected = productDao.findAll();
 
         IController controller = new Controller(true);
-        controller.processRequest("product add -t RockingChair --parameters");
+        controller.processRequest("product add -t RockingChair");
 
         List<Product> actual = productDao.findAll();
 

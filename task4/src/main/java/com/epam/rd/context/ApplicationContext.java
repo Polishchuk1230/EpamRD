@@ -28,6 +28,7 @@ public class ApplicationContext {
         put("cartService", cartService);
         put("orderService", orderService);
         put("running", true);
+        put("locale", "UA");
     }
 
     public static ApplicationContext getInstance() {

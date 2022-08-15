@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Controller implements IController {
-    private final Pattern COMMAND_PATTERN = Pattern.compile("^([a-zA-Z]*(?: [a-zA-Z]*)?)(?: [a-zA-Z0-9 \".,=:-]*)?$");
+    private final Pattern COMMAND_PATTERN = Pattern.compile("^(\\p{L}*(?: \\p{L}*)?)(?: [\\p{L}\\d \".,=:-]*)?$");
     private Map<String, ICommand> commands = new HashMap<>();
 
     public Controller(boolean randomInput) {
@@ -17,7 +17,7 @@ public class Controller implements IController {
         commands.put("cart list", new CartListCommand());
         commands.put("order create", new OrderCreateCommand());
         commands.put("order list", new OrderListCommand());
-        commands.put("product add", randomInput ? new ProductAddRandomCommand() : new ProductAddHandleCommand());
+        commands.put("product add", randomInput ? new ProductAddRandomCommand() : new ProductAddHandleLocalizedCommand());
         commands.put("product list", new ProductListCommand());
     }
 

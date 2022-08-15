@@ -7,18 +7,19 @@ import com.epam.rd.util.Reflection;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ProductAddHandleCommand extends AbstractProductAddCommand {
-    private static final Pattern PATTERN = Pattern.compile(",? ?([a-zA-Z]+)=\"?([a-zA-Z0-9 .]+)\"?");
+    private static final Pattern PATTERN = Pattern.compile(",? ?([\\p{L} ]+) ?= ?(?:\"([\\p{L}\\d ]+)\"|([\\d.]+))");
 
-    private Map<String, String> parseMap(String parameters) {
+    protected Map<String, String> parseMap(String parameters) {
         Matcher matcher = PATTERN.matcher(parameters);
 
         Map<String, String> result = new HashMap<>();
         while (matcher.find()) {
-            result.put(matcher.group(1), matcher.group(2));
+            result.put(matcher.group(1), Optional.ofNullable(matcher.group(2)).orElse(matcher.group(3)));
         }
 
         return result;

@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class AbstractProductAddCommand implements ICommand {
-    private final Pattern ADD_PRODUCT_PATTERN = Pattern.compile("^product add -t ([a-zA-Z]*)(?: --parameters ([a-zA-Z0-9 =,.\"]*))?$");
+    private Pattern addProductPattern = Pattern.compile("^product add -t ([a-zA-Z]*)(?: --parameters ([\\p{L}\\d =,.\"]*))?$");
     private IProductService productService = (IProductService) ApplicationContext.getInstance().find("productService");
     private final Map<String, Function<String, Product>> parsers = new HashMap<>();
 
@@ -24,7 +24,7 @@ public abstract class AbstractProductAddCommand implements ICommand {
 
     @Override
     public String execute(String command) {
-        Matcher matcher = ADD_PRODUCT_PATTERN.matcher(command);
+        Matcher matcher = addProductPattern.matcher(command);
         if (!matcher.find()) {
             return "Unknown parameters for the command 'product add'.";
         }
@@ -38,7 +38,7 @@ public abstract class AbstractProductAddCommand implements ICommand {
         return "Successfully added to the products: \n" + newProduct;
     }
 
-    private Product parseProduct(String productType, String parameters) {
+    protected Product parseProduct(String productType, String parameters) {
         Function<String, Product> parser = parsers.get(productType);
         if (parser != null) {
             return parser.apply(parameters);

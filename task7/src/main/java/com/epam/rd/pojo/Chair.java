@@ -1,11 +1,8 @@
 package com.epam.rd.pojo;
 
-import com.epam.rd.annotation.ProductField;
-
 import java.util.Objects;
 
 public class Chair extends Product {
-    @ProductField(fieldNameEn = "max weight", fieldNameUa = "максимальна вага")
     private int maxWeight;
 
     public Chair() {}

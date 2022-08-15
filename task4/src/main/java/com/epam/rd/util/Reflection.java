@@ -1,17 +1,20 @@
 package com.epam.rd.util;
 
+import com.epam.rd.annotation.ProductField;
+import com.epam.rd.context.ApplicationContext;
 import com.epam.rd.pojo.Product;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Reflection {
+
+    public static <T extends Product> T fillProduct(T blankProduct, Map<String, String> parameters) {
+        return fillProduct(blankProduct, parameters, false);
+    }
 
     /**
      * fill the blank Product instance with parameters
@@ -20,9 +23,16 @@ public class Reflection {
      * @return the product instance filled with parameters or null
      * @param <T>
      */
-    public static <T extends Product> T fillProduct(T blankProduct, Map<String, String> parameters) {
+    public static <T extends Product> T fillProduct(T blankProduct, Map<String, String> parameters, boolean isLocalized) {
         Method[] methods = blankProduct.getClass().getMethods();
 
+        // If we receive the localized parameters, here we standardize the key using standardizeParameters() method.
+        // Example for the default locale: max weight=90 ==> maxWeight=90
+        if (isLocalized) {
+            parameters = standardizeParameters(parameters, blankProduct.getClass());
+        }
+
+        // Here, for each entry, using reflection mechanisms, we find a setter, parse/cast a value, and invoke the setter with that value
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
 
             String key = entry.getKey();
@@ -32,19 +42,19 @@ public class Reflection {
                     .orElse(null);
 
             if (setter == null) {
-                // wrong parameter name was provided
+                // Somewhy an appropriate setter doesn't exist.
                 return null;
             }
 
             try {
-                switch (setter.getParameterTypes()[0].getTypeName()) {
-                    case "boolean" -> setter.invoke(blankProduct, Boolean.parseBoolean(entry.getValue()));
-                    case "double" ->  setter.invoke(blankProduct, Double.parseDouble(entry.getValue()));
-                    case "int" -> setter.invoke(blankProduct, Integer.parseInt(entry.getValue()));
-                    default -> setter.invoke(blankProduct, entry.getValue());
-                }
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                // wrong parameter value was provided
+                setter.invoke(blankProduct, switch (setter.getParameterTypes()[0].getTypeName()) {
+                    case "boolean" -> Boolean.parseBoolean(entry.getValue());
+                    case "double" ->  Double.parseDouble(entry.getValue());
+                    case "int" -> Integer.parseInt(entry.getValue());
+                    default -> entry.getValue();
+                });
+            } catch (IllegalAccessException | InvocationTargetException | NumberFormatException e) {
+                // Wrong parameter value was provided.
                 return null;
             }
 
@@ -53,16 +63,49 @@ public class Reflection {
         return blankProduct;
     }
 
+    // This method maps the localized user-friendly keys to normal.
+    // Example for the default locale: max weight=90 ==> maxWeight=90
+    private static Map<String, String> standardizeParameters(Map<String, String> parameters, Class<? extends Product> aClass) {
+        List<Field> fields = new ArrayList<>();
+        Reflection.collectAllFields(aClass, fields);
+
+        return parameters.entrySet().stream().collect(Collectors.toMap(
+                entry -> fields.stream()
+                        .filter(field -> field.isAnnotationPresent(ProductField.class))
+                        .filter(field -> getLocalizedFieldName(field).equalsIgnoreCase(entry.getKey()))
+                        .findFirst().map(Field::getName).orElseThrow(IllegalArgumentException::new)
+                , Map.Entry::getValue));
+    }
+
+    /**
+     * Return String representation of all fields of a Product
+     * @param aClass
+     * @param exceptions
+     * @return
+     * @param <T>
+     */
     public static <T extends Product> String getTypedFieldsAsString(Class<T> aClass, String... exceptions) {
         List<Field> fields = new ArrayList<>();
         collectAllFields(aClass, fields);
 
         return fields.stream()
                 .filter(field -> Arrays.stream(exceptions).noneMatch(exception -> exception.equalsIgnoreCase(field.getName())))
-                .map(field -> field.getName() + "=" + field.getAnnotatedType())
+                .map(field -> getLocalizedFieldName(field) + "=" + field.getAnnotatedType())
                 .collect(Collectors.joining(", "));
     }
-    private static <T extends Product> void collectAllFields(Class<T> aClass, List<Field> allFields) {
+
+    // Return a user-friendly name of a Field depending on the current locale.
+    private static String getLocalizedFieldName(Field field) {
+        String currentLocale = (String) ApplicationContext.getInstance().find("locale");
+        return switch (currentLocale) {
+            case "UA" -> field.getAnnotation(ProductField.class).fieldNameUa();
+            // default language - English
+            default -> field.getAnnotation(ProductField.class).fieldNameEn();
+        };
+    }
+
+    // Recursively collect to a provided list all the fields of each class in the Product hierarchy up to Product.
+    public static <T extends Product> void collectAllFields(Class<T> aClass, List<Field> allFields) {
         Class<?> superclass = aClass.getSuperclass();
         if (!superclass.equals(Product.class.getSuperclass())) {
             collectAllFields((Class<T>) superclass, allFields);
