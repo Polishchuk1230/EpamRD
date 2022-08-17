@@ -25,4 +25,9 @@ public class ProductAddRandomCommand extends AbstractProductAddCommand {
                 random.nextInt(20, 200),
                 random.nextInt(1, 90));
     }
+
+    @Override
+    protected String getHelp() {
+        return "Use template:\nproduct add -t PRODUCT_TYPE";
+    }
 }

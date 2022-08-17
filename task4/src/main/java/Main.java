@@ -45,8 +45,8 @@ public class Main {
             System.out.println("You have chosen random way. Use:\nproduct add -t PRODUCT_TYPE");
         } else {
             System.out.println("You have chosen handle way. Use the following templates:" +
-                    "\nproduct add -t GamingChair --parameters " + Reflection.getTypedFieldsAsString(GamingChair.class, "id") +
-                    "\nproduct add -t RockingChair --parameters " + Reflection.getTypedFieldsAsString(RockingChair.class, "id"));
+                    "\nproduct add -t GamingChair --parameters locale=true, " + Reflection.getTypedFieldsAsString(GamingChair.class, "id") +
+                    "\nproduct add -t RockingChair --parameters locale=true, " + Reflection.getTypedFieldsAsString(RockingChair.class, "id"));
         }
 
         IController controller = new Controller(randomInput);

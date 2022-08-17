@@ -13,16 +13,16 @@ import java.lang.reflect.Proxy;
  * Note: immutable
  */
 public class ImmutableGamingChairProxy implements InvocationHandler {
-    private final GamingChair value;
+    private final GamingChair gamingChair;
 
-    public static IGamingChair newInstance(int id, String name, double price, int maxWeight, boolean arms, boolean headrest) {
+    public static IGamingChair newInstance(GamingChair gamingChair) {
         return (IGamingChair) Proxy.newProxyInstance(IGamingChair.class.getClassLoader(),
                 new Class[] { IGamingChair.class },
-                new ImmutableGamingChairProxy(id, name, price, maxWeight, arms, headrest));
+                new ImmutableGamingChairProxy(gamingChair));
     }
 
-    private ImmutableGamingChairProxy(int id, String name, double price, int maxWeight, boolean arms, boolean headrest) {
-        this.value = new GamingChair(id, name, price, maxWeight, arms, headrest);
+    private ImmutableGamingChairProxy(GamingChair gamingChair) {
+        this.gamingChair = gamingChair;
     }
 
     @Override
@@ -30,6 +30,6 @@ public class ImmutableGamingChairProxy implements InvocationHandler {
         if (method.getName().startsWith("set")) {
             throw new UnsupportedOperationException();
         }
-        return method.invoke(value, args);
+        return method.invoke(gamingChair, args);
     }
 }

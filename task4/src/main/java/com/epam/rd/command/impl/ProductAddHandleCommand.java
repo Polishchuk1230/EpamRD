@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ProductAddHandleCommand extends AbstractProductAddCommand {
-    private static final Pattern PATTERN = Pattern.compile(",? ?([\\p{L} ]+) ?= ?(?:\"([\\p{L}\\d ]+)\"|([\\d.]+))");
+    private static final Pattern PATTERN = Pattern.compile(",? ?([\\p{L} ]+) ?= ?(?:\"([\\p{L}\\d ]+)\"|(true|false|[\\d.]+))");
 
     protected Map<String, String> parseMap(String parameters) {
         Matcher matcher = PATTERN.matcher(parameters);
@@ -27,11 +27,26 @@ public class ProductAddHandleCommand extends AbstractProductAddCommand {
 
     @Override
     Product collectGamingChair(String parameters) {
-        return Reflection.fillProduct(new GamingChair(), parseMap(parameters));
+        Map<String, String> map = parseMap(parameters);
+        if (Optional.ofNullable(map.remove("locale")).map(Boolean::parseBoolean).orElse(false)) {
+            return Reflection.fillProduct(new GamingChair(), map, true);
+        }
+        return Reflection.fillProduct(new GamingChair(), map);
     }
 
     @Override
     Product collectRockingChair(String parameters) {
-        return Reflection.fillProduct(new RockingChair(), parseMap(parameters));
+        Map<String, String> map = parseMap(parameters);
+        if (Optional.ofNullable(map.remove("locale")).map(Boolean::parseBoolean).orElse(false)) {
+            return Reflection.fillProduct(new RockingChair(), map, true);
+        }
+        return Reflection.fillProduct(new RockingChair(), map);
+    }
+
+    @Override
+    protected String getHelp() {
+        return "Use templates:" +
+                "\nproduct add -t GamingChair --parameters locale=true, " + Reflection.getTypedFieldsAsString(GamingChair.class, "id") +
+                "\nproduct add -t RockingChair --parameters locale=true, " + Reflection.getTypedFieldsAsString(RockingChair.class, "id");
     }
 }

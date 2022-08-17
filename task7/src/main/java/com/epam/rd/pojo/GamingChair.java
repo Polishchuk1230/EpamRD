@@ -7,6 +7,7 @@ public class GamingChair extends Chair implements IGamingChair {
     private boolean headrest;
 
     public GamingChair() {}
+
     public GamingChair(String name, double price, int maxWeight, boolean arms, boolean headrest) {
         super(name, price, maxWeight);
         this.arms = arms;

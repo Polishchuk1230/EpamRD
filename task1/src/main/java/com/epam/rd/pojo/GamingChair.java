@@ -5,12 +5,13 @@ import com.epam.rd.annotation.ProductField;
 import java.util.Objects;
 
 public class GamingChair extends Chair {
-    @ProductField(fieldNameEn = "arms", fieldNameUa = "підлокітники")
+    @ProductField("GAMING_CHAIR_ARMS")
     private boolean arms;
-    @ProductField(fieldNameEn = "headrest", fieldNameUa = "підголівник")
+    @ProductField("GAMING_CHAIR_HEADREST")
     private boolean headrest;
 
     public GamingChair() {}
+
     public GamingChair(String name, double price, int maxWeight, boolean arms, boolean headrest) {
         super(name, price, maxWeight);
         this.arms = arms;

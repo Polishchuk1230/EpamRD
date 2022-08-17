@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class AbstractProductAddCommand implements ICommand {
-    private Pattern addProductPattern = Pattern.compile("^product add -t ([a-zA-Z]*)(?: --parameters ([\\p{L}\\d =,.\"]*))?$");
+    private static final Pattern ADD_PRODUCT_PATTERN = Pattern.compile("^product add -t ([a-zA-Z]*)(?: --parameters ([\\p{L}\\d =,.\"]*))?$");
     private IProductService productService = (IProductService) ApplicationContext.getInstance().find("productService");
     private final Map<String, Function<String, Product>> parsers = new HashMap<>();
 
@@ -24,14 +24,14 @@ public abstract class AbstractProductAddCommand implements ICommand {
 
     @Override
     public String execute(String command) {
-        Matcher matcher = addProductPattern.matcher(command);
+        Matcher matcher = ADD_PRODUCT_PATTERN.matcher(command);
         if (!matcher.find()) {
-            return "Unknown parameters for the command 'product add'.";
+            return getHelp();
         }
 
         Product newProduct = parseProduct(matcher.group(1), Optional.ofNullable(matcher.group(2)).orElse(""));
         if (newProduct == null) {
-            return "Provided parameters don't match to the type " + matcher.group(1) + ". Or the type does not exist.";
+            return "Provided parameters don't match to the type " + matcher.group(1) + ". Or the type does not exist.\n" + getHelp();
         }
 
         productService.add(newProduct);
@@ -48,4 +48,5 @@ public abstract class AbstractProductAddCommand implements ICommand {
 
     abstract Product collectGamingChair(String parameters);
     abstract Product collectRockingChair(String parameters);
+    protected abstract String getHelp();
 }

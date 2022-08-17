@@ -17,8 +17,9 @@ public class Controller implements IController {
         commands.put("cart list", new CartListCommand());
         commands.put("order create", new OrderCreateCommand());
         commands.put("order list", new OrderListCommand());
-        commands.put("product add", randomInput ? new ProductAddRandomCommand() : new ProductAddHandleLocalizedCommand());
+        commands.put("product add", randomInput ? new ProductAddRandomCommand() : new ProductAddHandleCommand());
         commands.put("product list", new ProductListCommand());
+        commands.put("locale set", new LocaleSetCommand());
     }
 
     @Override

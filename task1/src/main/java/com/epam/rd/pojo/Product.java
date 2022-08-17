@@ -7,12 +7,13 @@ import java.util.Objects;
 
 public class Product implements Serializable {
     private int id;
-    @ProductField(fieldNameEn = "name", fieldNameUa = "назва")
+    @ProductField("PRODUCT_NAME")
     private String name;
-    @ProductField(fieldNameEn = "price", fieldNameUa = "вартість")
+    @ProductField("PRODUCT_PRICE")
     private double price;
 
     public Product() {}
+
     public Product(String name, double price) {
         this.name = name;
         this.price = price;

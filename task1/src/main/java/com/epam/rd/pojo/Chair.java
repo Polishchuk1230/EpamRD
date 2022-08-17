@@ -5,10 +5,11 @@ import com.epam.rd.annotation.ProductField;
 import java.util.Objects;
 
 public class Chair extends Product {
-    @ProductField(fieldNameEn = "max weight", fieldNameUa = "максимальна вага")
+    @ProductField("CHAIR_MAX_WEIGHT")
     private int maxWeight;
 
     public Chair() {}
+
     public Chair(String name, double price, int maxWeight) {
         super(name, price);
         this.setMaxWeight(maxWeight);

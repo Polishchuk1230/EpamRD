@@ -6,6 +6,7 @@ public class Chair extends Product {
     private int maxWeight;
 
     public Chair() {}
+
     public Chair(String name, double price, int maxWeight) {
         super(name, price);
         this.setMaxWeight(maxWeight);

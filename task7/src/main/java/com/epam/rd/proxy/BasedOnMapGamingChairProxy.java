@@ -1,10 +1,13 @@
 package com.epam.rd.proxy;
 
+import com.epam.rd.pojo.GamingChair;
 import com.epam.rd.pojo.IGamingChair;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,21 +18,26 @@ public class BasedOnMapGamingChairProxy implements InvocationHandler {
     private Map<String, Object> map = new HashMap<>();
 
     public static IGamingChair getInstance() {
-        return BasedOnMapGamingChairProxy.getInstance(0, "", 0.,0, false, false);
+        return BasedOnMapGamingChairProxy.getInstance(new GamingChair());
     }
-    public static IGamingChair getInstance(int id, String name, double price, int maxWeight, boolean arms, boolean headrest) {
+    public static IGamingChair getInstance(IGamingChair gamingChair) {
         return (IGamingChair) Proxy.newProxyInstance(IGamingChair.class.getClassLoader(),
                 new Class[] { IGamingChair.class },
-                new BasedOnMapGamingChairProxy(id, name, price, maxWeight, arms, headrest));
+                new BasedOnMapGamingChairProxy(gamingChair));
     }
 
-    private BasedOnMapGamingChairProxy(int id, String name, double price, int maxWeight, boolean arms, boolean headrest) {
-        map.put("Id", id);
-        map.put("Name", name);
-        map.put("Price", price);
-        map.put("MaxWeight", maxWeight);
-        map.put("Arms", arms);
-        map.put("Headrest", headrest);
+    private BasedOnMapGamingChairProxy(IGamingChair gamingChair) {
+        Arrays.stream(gamingChair.getClass().getMethods())
+                .filter(method -> method.getName().startsWith("get") || method.getName().startsWith("is"))
+                .forEach(getter -> {
+                    try {
+                        String temp = getter.getName().startsWith("get") ?
+                                getter.getName().substring(3) : getter.getName().substring(2);
+                        map.put(temp, getter.invoke(gamingChair));
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     @Override
@@ -42,6 +50,9 @@ public class BasedOnMapGamingChairProxy implements InvocationHandler {
         // manage getters
         else if (method.getName().startsWith("get")) {
             String fieldName = method.getName().substring(3);
+            return map.get(fieldName);
+        } else if (method.getName().startsWith("is")) {
+            String fieldName = method.getName().substring(2);
             return map.get(fieldName);
         }
 

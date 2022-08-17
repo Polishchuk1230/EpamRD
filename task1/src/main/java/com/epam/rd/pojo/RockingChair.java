@@ -5,14 +5,16 @@ import com.epam.rd.annotation.ProductField;
 import java.util.Objects;
 
 public class RockingChair extends Chair {
-    @ProductField(fieldNameEn = "max rocking amplitude", fieldNameUa = "максимальний нахил")
+    @ProductField("ROCKING_CHAIR_MAX_ROCKING_AMPLITUDE")
     private int maxRockingAmplitude;
 
     public RockingChair() {}
+
     public RockingChair(String name, double price, int maxWeight, int maxRockingAmplitude) {
         super(name, price, maxWeight);
         this.maxRockingAmplitude = maxRockingAmplitude;
     }
+
     public RockingChair(int id, String name, double price, int maxWeight, int maxRockingAmplitude) {
         super(id, name, price, maxWeight);
         this.maxRockingAmplitude = maxRockingAmplitude;

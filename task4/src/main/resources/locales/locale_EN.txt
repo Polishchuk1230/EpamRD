@@ -1,0 +1,11 @@
+# English language localization
+
+PRODUCT_NAME=name
+PRODUCT_PRICE=price
+
+CHAIR_MAX_WEIGHT=max weight
+
+GAMING_CHAIR_ARMS=arms
+GAMING_CHAIR_HEADREST=headrest
+
+ROCKING_CHAIR_MAX_ROCKING_AMPLITUDE=max rocking amplitude
