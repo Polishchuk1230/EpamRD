@@ -13,16 +13,13 @@ import java.util.stream.Collectors;
 
 public class Reflection {
 
-    public static <T extends Product> T fillProduct(T blankProduct, Map<String, String> parameters) {
-        return fillProduct(blankProduct, parameters, false);
-    }
-
     /**
      * fill the blank Product instance with parameters
+     *
      * @param blankProduct
      * @param parameters
-     * @return the product instance filled with parameters or null
      * @param <T>
+     * @return the product instance filled with parameters or null
      */
     public static <T extends Product> T fillProduct(T blankProduct, Map<String, String> parameters, boolean isLocalized) {
         Method[] methods = blankProduct.getClass().getMethods();
@@ -52,13 +49,8 @@ public class Reflection {
             }
 
             try {
-                setter.invoke(blankProduct, switch (setter.getParameterTypes()[0].getTypeName()) {
-                    case "boolean" -> Boolean.parseBoolean(entry.getValue());
-                    case "double" ->  Double.parseDouble(entry.getValue());
-                    case "int" -> Integer.parseInt(entry.getValue());
-                    default -> entry.getValue();
-                });
-            } catch (IllegalAccessException | InvocationTargetException | NumberFormatException e) {
+                setter.invoke(blankProduct, parseObjectByTypeName(setter.getParameterTypes()[0].getTypeName(), entry.getValue()));
+            } catch (InvocationTargetException | IllegalAccessException e) {
                 // Wrong parameter value was provided.
                 return null;
             }
@@ -66,6 +58,15 @@ public class Reflection {
         }
 
         return blankProduct;
+    }
+
+    private static Object parseObjectByTypeName(String typeName, String value) {
+        return switch (typeName) {
+            case "boolean" -> Boolean.parseBoolean(value);
+            case "double" -> Double.parseDouble(value);
+            case "int" -> Integer.parseInt(value);
+            default -> value;
+        };
     }
 
     // This method maps the localized user-friendly keys to normal.
@@ -79,18 +80,23 @@ public class Reflection {
         return parameters.entrySet().stream().collect(Collectors.toMap(
                 entry -> fields.stream()
                         .filter(field -> field.isAnnotationPresent(ProductField.class))
-                        .filter(field -> Optional.ofNullable(localizationService.getLocalizedFieldName(field))
-                                .orElse("").equalsIgnoreCase(entry.getKey()))
+                        .filter(field ->
+                                Optional.ofNullable(
+                                                localizationService.getLocalizedFieldName(
+                                                        field.getAnnotation(ProductField.class).value()))
+                                        .orElse("")
+                                        .equalsIgnoreCase(entry.getKey()))
                         .findFirst().map(Field::getName).orElseThrow(IllegalArgumentException::new)
                 , Map.Entry::getValue));
     }
 
     /**
      * Return String representation of all fields of a Product
+     *
      * @param aClass
      * @param exceptions
-     * @return
      * @param <T>
+     * @return
      */
     public static <T extends Product> String getTypedFieldsAsString(Class<T> aClass, String... exceptions) {
         ILocalizationService localizationService = (ILocalizationService) ApplicationContext.getInstance().find("localizationService");
@@ -100,7 +106,8 @@ public class Reflection {
 
         return fields.stream()
                 .filter(field -> Arrays.stream(exceptions).noneMatch(exception -> exception.equalsIgnoreCase(field.getName())))
-                .map(field -> localizationService.getLocalizedFieldName(field) + "=" + field.getAnnotatedType())
+                .map(field -> localizationService.getLocalizedFieldName(field.getAnnotation(ProductField.class).value())
+                        + "=" + field.getAnnotatedType())
                 .collect(Collectors.joining(", "));
     }
 

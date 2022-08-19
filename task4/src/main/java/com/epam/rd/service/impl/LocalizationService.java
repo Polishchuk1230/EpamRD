@@ -1,9 +1,7 @@
 package com.epam.rd.service.impl;
 
-import com.epam.rd.annotation.ProductField;
 import com.epam.rd.service.ILocalizationService;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 public class LocalizationService implements ILocalizationService {
@@ -17,8 +15,8 @@ public class LocalizationService implements ILocalizationService {
         resourceBundle = loadLocale(localeCode);
     }
 
-    public String getLocalizedFieldName(Field field) {
-        return resourceBundle.getString(field.getAnnotation(ProductField.class).value());
+    public String getLocalizedFieldName(String fieldName) {
+        return resourceBundle.getString(fieldName);
     }
 
     private static ResourceBundle loadLocale(String localeCode) {

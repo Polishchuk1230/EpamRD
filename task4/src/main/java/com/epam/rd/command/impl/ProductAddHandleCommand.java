@@ -27,20 +27,16 @@ public class ProductAddHandleCommand extends AbstractProductAddCommand {
 
     @Override
     Product collectGamingChair(String parameters) {
-        Map<String, String> map = parseMap(parameters);
-        if (Optional.ofNullable(map.remove("locale")).map(Boolean::parseBoolean).orElse(false)) {
-            return Reflection.fillProduct(new GamingChair(), map, true);
-        }
-        return Reflection.fillProduct(new GamingChair(), map);
+        Map<String, String> temp = parseMap(parameters);
+        return Reflection.fillProduct(new GamingChair(), temp,
+                Optional.ofNullable(temp.remove("locale")).map(Boolean::parseBoolean).orElse(false));
     }
 
     @Override
     Product collectRockingChair(String parameters) {
-        Map<String, String> map = parseMap(parameters);
-        if (Optional.ofNullable(map.remove("locale")).map(Boolean::parseBoolean).orElse(false)) {
-            return Reflection.fillProduct(new RockingChair(), map, true);
-        }
-        return Reflection.fillProduct(new RockingChair(), map);
+        Map<String, String> temp = parseMap(parameters);
+        return Reflection.fillProduct(new RockingChair(), temp,
+                Optional.ofNullable(temp.remove("locale")).map(Boolean::parseBoolean).orElse(false));
     }
 
     @Override
