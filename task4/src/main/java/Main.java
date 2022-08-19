@@ -31,7 +31,10 @@ public class Main {
                 "\n[displays the closest order after the provided date]\n\n" +
 
                 "order list --period dd.MM.yyyy - dd.MM.yyyy" +
-                "\n[displays the information about all the orders between two date points]\n\n";
+                "\n[displays the information about all the orders between two date points]\n\n" +
+
+                "exit" +
+                "\n[closes the program and save data]";
         System.out.println(startInfo);
         Scanner sc = new Scanner(System.in);
 
@@ -39,11 +42,11 @@ public class Main {
         System.out.println("Do you prefer to fill product parameters randomly? Type: true. Handle way otherwise.");
         boolean randomInput = sc.nextLine().equals("true");
         if (randomInput) {
-            System.out.println("You have chose random way. Use:\nproduct add -t PRODUCT_TYPE");
+            System.out.println("You have chosen random way. Use:\nproduct add -t PRODUCT_TYPE");
         } else {
-            System.out.println("You have chose handle way. Use the following templates:" +
-                    "\nproduct add -t GamingChair --parameters " + Reflection.getTypedFieldsAsString(GamingChair.class, "id") +
-                    "\nproduct add -t RockingChair --parameters " + Reflection.getTypedFieldsAsString(RockingChair.class, "id"));
+            System.out.println("You have chosen handle way. Use the following templates:" +
+                    "\nproduct add -t GamingChair --parameters locale=true, " + Reflection.getTypedFieldsAsString(GamingChair.class, "id") +
+                    "\nproduct add -t RockingChair --parameters locale=true, " + Reflection.getTypedFieldsAsString(RockingChair.class, "id"));
         }
 
         IController controller = new Controller(randomInput);

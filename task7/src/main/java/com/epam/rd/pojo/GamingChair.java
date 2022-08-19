@@ -1,13 +1,9 @@
 package com.epam.rd.pojo;
 
-import com.epam.rd.annotation.ProductField;
-
 import java.util.Objects;
 
-public class GamingChair extends Chair {
-    @ProductField("GAMING_CHAIR_ARMS")
+public class GamingChair extends Chair implements IGamingChair {
     private boolean arms;
-    @ProductField("GAMING_CHAIR_HEADREST")
     private boolean headrest;
 
     public GamingChair() {}

@@ -4,6 +4,7 @@ import com.epam.rd.dao.impl.CartDao;
 import com.epam.rd.dao.impl.OrderDao;
 import com.epam.rd.dao.impl.ProductDao;
 import com.epam.rd.service.impl.CartService;
+import com.epam.rd.service.impl.LocalizationService;
 import com.epam.rd.service.impl.OrderService;
 import com.epam.rd.service.impl.ProductService;
 
@@ -22,12 +23,14 @@ public class ApplicationContext {
         ProductService productService = new ProductService(productDao);
         CartService cartService = new CartService(new CartDao(), productService);
         OrderService orderService = new OrderService(new OrderDao(), productService, cartService);
+        LocalizationService localizationService = new LocalizationService();
 
         put("productDao", productDao);
         put("productService", productService);
         put("cartService", cartService);
         put("orderService", orderService);
         put("running", true);
+        put("localizationService", localizationService);
     }
 
     public static ApplicationContext getInstance() {

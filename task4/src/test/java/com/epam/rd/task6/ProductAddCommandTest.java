@@ -26,12 +26,13 @@ public class ProductAddCommandTest {
         Assert.assertEquals(expected, actual);
     }
 
+    @Test
     public void productAddRandomCommandTest() {
         IProductDaoFile productDao = (IProductDaoFile) ApplicationContext.getInstance().find("productDao");
         List<Product> expected = productDao.findAll();
 
         IController controller = new Controller(true);
-        controller.processRequest("product add -t RockingChair --parameters");
+        controller.processRequest("product add -t RockingChair");
 
         List<Product> actual = productDao.findAll();
 

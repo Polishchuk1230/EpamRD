@@ -1,15 +1,11 @@
 package com.epam.rd.pojo;
 
-import com.epam.rd.annotation.ProductField;
-
 import java.io.Serializable;
 import java.util.Objects;
 
 public class Product implements Serializable {
     private int id;
-    @ProductField("PRODUCT_NAME")
     private String name;
-    @ProductField("PRODUCT_PRICE")
     private double price;
 
     public Product() {}
