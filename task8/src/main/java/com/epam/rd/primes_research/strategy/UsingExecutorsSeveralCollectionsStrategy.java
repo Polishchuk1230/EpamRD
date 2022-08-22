@@ -1,4 +1,4 @@
-package com.epam.rd.primes_research;
+package com.epam.rd.primes_research.strategy;
 
 import com.epam.rd.primes_research.util.UtilMethods;
 
@@ -10,9 +10,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class PrimeNumbersFinderEx {
+public class UsingExecutorsSeveralCollectionsStrategy implements IFindPrimesStrategy {
 
-    public static Collection<Integer> findAllPrimesMethod1(int startDiapason, int endDiapason, int threadAmount) {
+    @Override
+    public Collection<Integer> findAllPrimes(int startDiapason, int endDiapason, int threadAmount) {
+        System.out.println("UsingExecutorsSeveralCollectionsStrategy is running");
         // create thread-safe collection (one for all)
         List<Integer> collection = Collections.synchronizedList(new ArrayList<>());
 
@@ -20,34 +22,7 @@ public class PrimeNumbersFinderEx {
         for (int i = 0; i < threadAmount; i++) {
             int finalI = i;
             Runnable runnable = () -> {
-                for (int j = startDiapason; j <= endDiapason; j++) {
-                    if (j % threadAmount == finalI && UtilMethods.isPrime(j)) {
-                        collection.add(j);
-                    }
-                }
-            };
-            executorService.execute(runnable);
-        }
-
-        // joining all the threads with main
-        executorService.shutdown();
-        try {
-            executorService.awaitTermination(1000, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        return collection;
-    }
-
-    public static Collection<Integer> findAllPrimesMethod2(int startDiapason, int endDiapason, int threadAmount) {
-        // create thread-safe collection (one for all)
-        List<Integer> collection = Collections.synchronizedList(new ArrayList<>());
-
-        ExecutorService executorService = Executors.newFixedThreadPool(threadAmount);
-        for (int i = 0; i < threadAmount; i++) {
-            int finalI = i;
-            Runnable runnable = () -> {
+                // each thread has its own collection
                 List<Integer> temp = new ArrayList<>();
                 for (int j = startDiapason; j <= endDiapason; j++) {
                     if (j % threadAmount == finalI && UtilMethods.isPrime(j)) {
@@ -69,5 +44,4 @@ public class PrimeNumbersFinderEx {
 
         return collection;
     }
-
 }

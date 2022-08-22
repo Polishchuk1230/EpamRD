@@ -1,4 +1,4 @@
-package com.epam.rd.file_research;
+package com.epam.rd.file_research.entity;
 
 import com.epam.rd.file_research.util.FileResearchMethods;
 

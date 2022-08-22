@@ -1,9 +1,12 @@
-import com.epam.rd.file_research.FileResearcher;
+package com.epam.rd.file_research.controller;
+
+import com.epam.rd.file_research.entity.FileResearcher;
 
 import java.util.Scanner;
 
-public class Main {
-    public static void main(String[] args) {
+public class Application {
+
+    public void start() {
         try (Scanner sc = new Scanner(System.in);
              FileResearcher fileResearcher = new FileResearcher()) {
             fileResearcher.start();
