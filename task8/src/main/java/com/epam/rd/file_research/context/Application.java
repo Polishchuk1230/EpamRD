@@ -1,4 +1,4 @@
-package com.epam.rd.file_research.controller;
+package com.epam.rd.file_research.context;
 
 import com.epam.rd.file_research.entity.FileResearcher;
 
