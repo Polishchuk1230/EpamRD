@@ -1,5 +1,7 @@
 package com.epam.rd.primes_research.util;
 
+import com.epam.rd.primes_research.entity.Pair;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -56,14 +58,13 @@ public class UtilMethods {
      * @param index
      * @return
      */
-    public static int[] getThreadInterval(int startD, int endD, int threadAmount, int index) {
+    public static Pair<Integer, Integer> getThreadInterval(int startD, int endD, int threadAmount, int index) {
         int length = endD - startD + 1;
         int operationsPerThread = (int) Math.ceil(length/(double) threadAmount);
 
         int start = startD + index * operationsPerThread;
         int end = Math.min(start + operationsPerThread, endD + 1);
-
-        System.out.printf("index %d, start %d, end %d\n", index, start, end);
-        return new int[] { start, end };
+        
+        return new Pair<>(start, end);
     }
 }

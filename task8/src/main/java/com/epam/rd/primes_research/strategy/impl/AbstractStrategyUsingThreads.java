@@ -1,15 +1,8 @@
 package com.epam.rd.primes_research.strategy.impl;
 
-import com.epam.rd.primes_research.strategy.IFindPrimesStrategy;
-
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
-public abstract class AbstractStrategyUsingThreads implements IFindPrimesStrategy {
-    // create thread-safe collection (one for all)
-    protected List<Integer> collection = Collections.synchronizedList(new ArrayList<>());
+public abstract class AbstractStrategyUsingThreads extends AbstractStrategy {
 
     @Override
     public Collection<Integer> findAllPrimes(int startDiapason, int endDiapason, int threadAmount) throws InterruptedException {

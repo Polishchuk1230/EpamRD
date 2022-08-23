@@ -7,6 +7,7 @@ import com.epam.rd.primes_research.strategy.impl.UsingThreadsOneCollectionStrate
 import com.epam.rd.primes_research.strategy.impl.UsingThreadsSeveralCollectionsStrategy;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -16,16 +17,11 @@ public class ApplicationStarter {
     private static final int MAX_THREADS = 10;
     private Pattern pattern = Pattern.compile("(\\d+)-(\\d+)(?:, threads=(\\d+))?(?:, strategy=(\\d+))?");
 
-    private IFindPrimesStrategy[] strategies;
-
-    {
-        strategies = new IFindPrimesStrategy[] {
-                new UsingThreadsOneCollectionStrategy(),
-                new UsingThreadsSeveralCollectionsStrategy(),
-                new UsingExecutorsOneCollectionStrategy(),
-                new UsingExecutorsSeveralCollectionsStrategy()
-        };
-    }
+    private Map<Integer, IFindPrimesStrategy> strategies = Map.of(
+            0, new UsingThreadsOneCollectionStrategy(),
+            1, new UsingThreadsSeveralCollectionsStrategy(),
+            2, new UsingExecutorsOneCollectionStrategy(),
+            3, new UsingExecutorsSeveralCollectionsStrategy());
 
     public void start() {
         try (Scanner scanner = new Scanner(System.in)) {
@@ -51,12 +47,11 @@ public class ApplicationStarter {
                         .orElse(1);
                 int strategyIndex = Optional.ofNullable(matcher.group(4))
                         .map(Integer::parseInt)
-                        .filter(i -> i < strategies.length)
                         .orElse(0);
 
                 Collection<Integer> primes = null;
                 try {
-                    primes = strategies[strategyIndex].findAllPrimes(startDiapason, endDiapason, threads);
+                    primes = strategies.getOrDefault(strategyIndex, strategies.get(0)).findAllPrimes(startDiapason, endDiapason, threads);
                 } catch (InterruptedException e) {
                     System.out.println("The thread was interrupted.");
                 }
