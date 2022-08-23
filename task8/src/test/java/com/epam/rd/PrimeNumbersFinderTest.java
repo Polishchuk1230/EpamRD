@@ -1,7 +1,7 @@
 package com.epam.rd;
 
-import com.epam.rd.primes_research.strategy.UsingThreadsOneCollectionStrategy;
-import com.epam.rd.primes_research.strategy.UsingThreadsSeveralCollectionsStrategy;
+import com.epam.rd.primes_research.strategy.impl.UsingThreadsOneCollectionStrategy;
+import com.epam.rd.primes_research.strategy.impl.UsingThreadsSeveralCollectionsStrategy;
 import com.epam.rd.primes_research.util.UtilMethods;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import java.util.*;
 public class PrimeNumbersFinderTest {
 
     @Test
-    public void findAllPrimesMethodTest() {
+    public void findAllPrimesMethodTest() throws InterruptedException {
         List<Integer> expected = new ArrayList<>(Arrays.asList(19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89));
         Collection<Integer> result = new UsingThreadsOneCollectionStrategy().findAllPrimes(19, 89, 2);
 
@@ -19,7 +19,7 @@ public class PrimeNumbersFinderTest {
     }
 
     @Test
-    public void equalityRandomTest() {
+    public void equalityRandomTest() throws InterruptedException {
         Random random = new Random();
         int startPoint = random.nextInt(10000);
         int length = random.nextInt(25000);
@@ -31,7 +31,7 @@ public class PrimeNumbersFinderTest {
     }
 
     @Test
-    public void compareTwoMethods() {
+    public void compareTwoMethods() throws InterruptedException {
         long firstTimePoint = System.currentTimeMillis();
         Collection<Integer> primes1 = new UsingThreadsOneCollectionStrategy().findAllPrimes(1, 100_000, 6);
         long secondTimePoint = System.currentTimeMillis();

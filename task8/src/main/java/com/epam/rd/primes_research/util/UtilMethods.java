@@ -47,4 +47,23 @@ public class UtilMethods {
 
         return temp.isEmpty();
     }
+
+    /**
+     * It returns an individual interval of integers for each thread depending on yhe thread's index.
+     * @param startD
+     * @param endD
+     * @param threadAmount
+     * @param index
+     * @return
+     */
+    public static int[] getThreadInterval(int startD, int endD, int threadAmount, int index) {
+        int length = endD - startD + 1;
+        int operationsPerThread = (int) Math.ceil(length/(double) threadAmount);
+
+        int start = startD + index * operationsPerThread;
+        int end = Math.min(start + operationsPerThread, endD + 1);
+
+        System.out.printf("index %d, start %d, end %d\n", index, start, end);
+        return new int[] { start, end };
+    }
 }

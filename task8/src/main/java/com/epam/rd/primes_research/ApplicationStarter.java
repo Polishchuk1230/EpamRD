@@ -1,6 +1,10 @@
-package com.epam.rd.primes_research.context;
+package com.epam.rd.primes_research;
 
 import com.epam.rd.primes_research.strategy.*;
+import com.epam.rd.primes_research.strategy.impl.UsingExecutorsOneCollectionStrategy;
+import com.epam.rd.primes_research.strategy.impl.UsingExecutorsSeveralCollectionsStrategy;
+import com.epam.rd.primes_research.strategy.impl.UsingThreadsOneCollectionStrategy;
+import com.epam.rd.primes_research.strategy.impl.UsingThreadsSeveralCollectionsStrategy;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -8,7 +12,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Application {
+public class ApplicationStarter {
     private static final int MAX_THREADS = 10;
     private Pattern pattern = Pattern.compile("(\\d+)-(\\d+)(?:, threads=(\\d+))?(?:, strategy=(\\d+))?");
 
@@ -50,7 +54,12 @@ public class Application {
                         .filter(i -> i < strategies.length)
                         .orElse(0);
 
-                Collection<Integer> primes = strategies[strategyIndex].findAllPrimes(startDiapason, endDiapason, threads);
+                Collection<Integer> primes = null;
+                try {
+                    primes = strategies[strategyIndex].findAllPrimes(startDiapason, endDiapason, threads);
+                } catch (InterruptedException e) {
+                    System.out.println("The thread was interrupted.");
+                }
                 System.out.println(primes);
             }
         }
