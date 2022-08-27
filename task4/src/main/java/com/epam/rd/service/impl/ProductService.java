@@ -29,4 +29,9 @@ public class ProductService implements IProductService {
     public boolean add(Product product) {
         return productDao.add(product);
     }
+
+    @Override
+    public int count() {
+        return productDao.findAll().size();
+    }
 }

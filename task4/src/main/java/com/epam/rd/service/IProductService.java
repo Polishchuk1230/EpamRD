@@ -6,4 +6,5 @@ public interface IProductService {
     String getAllAsString();
     Product findById(int id);
     boolean add(Product product);
+    int count();
 }
