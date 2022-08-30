@@ -86,4 +86,13 @@ public class OrderListCommand implements ICommand {
                     "--period dd.MM.yyyy hh:mm:ss - dd.MM.yyyy hh:mm:ss";
         }
     }
+
+    @Override
+    public String getInfo() {
+        return "order list --date dd.MM.yyyy hh:mm:ss" +
+                "\n[displays the closest order after the provided date]\n\n" +
+
+                "order list --period dd.MM.yyyy - dd.MM.yyyy" +
+                "\n[displays the information about all the orders between two date points]";
+    }
 }

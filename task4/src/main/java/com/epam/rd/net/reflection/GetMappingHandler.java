@@ -1,20 +1,17 @@
 package com.epam.rd.net.reflection;
 
+import com.epam.rd.net.exception.CustomException;
 import com.epam.rd.net.socket_controller.ISocketController;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class GetMappingHandler {
-    private ISocketController controllerClass;
 
-    public GetMappingHandler(ISocketController controllerClass) {
-        this.controllerClass = controllerClass;
-    }
-
-    public String processCommand(String path, Object... args) throws InvocationTargetException, IllegalAccessException {
-        Method[] methods = controllerClass.getClass().getMethods();
+    public static String processRequest(ISocketController controller, String path, Object[] args) {
+        Method[] methods = controller.getClass().getMethods();
 
         Method method = Arrays.stream(methods)
                 .filter(m -> m.isAnnotationPresent(GetMapping.class))
@@ -26,6 +23,14 @@ public class GetMappingHandler {
             return null;
         }
 
-        return (String) method.invoke(controllerClass, args);
+        args = Arrays.stream(args)
+                .filter(Objects::nonNull)
+                .toArray();
+
+        try {
+            return (String) method.invoke(controller, args);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new CustomException("Exception during method invoking.");
+        }
     }
 }

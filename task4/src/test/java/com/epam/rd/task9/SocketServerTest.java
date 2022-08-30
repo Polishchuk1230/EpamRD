@@ -1,5 +1,6 @@
 package com.epam.rd.task9;
 
+import com.epam.rd.net.exception.CustomException;
 import com.epam.rd.net.socket_controller.ISocketController;
 import com.epam.rd.net.socket_connection.SocketConnectionFactory;
 import com.epam.rd.net.socket_server.SocketServer;
@@ -50,7 +51,7 @@ public class SocketServerTest {
                 actual.add(result);
 
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new CustomException(e);
             }
         };
 

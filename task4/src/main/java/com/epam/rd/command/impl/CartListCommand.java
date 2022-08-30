@@ -28,4 +28,13 @@ public class CartListCommand implements ICommand {
 
         return "Unknown parameters of the command 'cart list'";
     }
+
+    @Override
+    public String getInfo() {
+        return "cart list" +
+                "\n[displays the cart's content]\n\n" +
+
+                "cart list N" +
+                "\n[displays the information about the last N items in the cart]";
+    }
 }

@@ -1,8 +1,5 @@
 package com.epam.rd.net.socket_controller;
 
-import com.epam.rd.controller.IController;
-
-public interface ISocketController extends IController {
-
+public interface ISocketController {
     String processRequest(String command);
 }

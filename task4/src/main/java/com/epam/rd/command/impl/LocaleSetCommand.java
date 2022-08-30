@@ -12,4 +12,9 @@ public class LocaleSetCommand implements ICommand {
         localizationService.setLocale(command.substring(11));
         return "Locale has been changed.";
     }
+
+    @Override
+    public String getInfo() {
+        return "locale set EN\\UA\n[sets current application locale]";
+    }
 }

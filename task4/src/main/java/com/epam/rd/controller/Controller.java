@@ -6,6 +6,7 @@ import com.epam.rd.command.impl.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Controller implements IController {
     private final Pattern COMMAND_PATTERN = Pattern.compile("^(\\p{L}*(?: \\p{L}*)?)(?: [\\p{L}\\d \".,=:-]*)?$");
@@ -20,6 +21,12 @@ public class Controller implements IController {
         commands.put("product add", randomInput ? new ProductAddRandomCommand() : new ProductAddHandleCommand());
         commands.put("product list", new ProductListCommand());
         commands.put("locale set", new LocaleSetCommand());
+    }
+
+    public String getFullInfo() {
+        return commands.values().stream()
+                .map(ICommand::getInfo)
+                .collect(Collectors.joining("\n\n"));
     }
 
     @Override

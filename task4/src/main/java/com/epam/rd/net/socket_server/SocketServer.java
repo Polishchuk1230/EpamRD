@@ -1,12 +1,15 @@
 package com.epam.rd.net.socket_server;
 
 import com.epam.rd.net.socket_connection.AbstractFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
 
 public class SocketServer extends Thread {
+    private static final Logger logger = LogManager.getLogger(SocketServer.class);
     private final int port;
     private AbstractFactory socketConnectionFactory;
 
@@ -33,7 +36,7 @@ public class SocketServer extends Thread {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
         }
     }
 

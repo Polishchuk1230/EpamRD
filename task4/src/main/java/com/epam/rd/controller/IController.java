@@ -5,4 +5,6 @@ package com.epam.rd.controller;
  */
 public interface IController {
     String processRequest(String command);
+
+    String getFullInfo();
 }

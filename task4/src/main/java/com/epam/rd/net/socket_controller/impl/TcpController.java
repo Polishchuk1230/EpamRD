@@ -6,7 +6,6 @@ import com.epam.rd.pojo.Product;
 import com.epam.rd.service.IProductService;
 import com.epam.rd.service.impl.ProductService;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,9 +25,10 @@ public class TcpController implements ISocketController {
             return productService.count() + "";
         }
         else if (command.startsWith("get item=")) {
-            int itemId = Optional.ofNullable(matcher.group(1)).map(Integer::parseInt).orElse(0);
-            Product product = Optional.ofNullable(productService.findById(itemId))
-                    .orElse(new Product("unknown product", 0.));
+            Product product = productService.findByStringId(matcher.group(1));
+            if (product == null) {
+                return "Unknown product";
+            }
             return String.format("%s | %.2f", product.getName(), product.getPrice());
         }
 

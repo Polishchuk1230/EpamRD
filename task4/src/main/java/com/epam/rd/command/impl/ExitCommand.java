@@ -18,4 +18,9 @@ public class ExitCommand implements ICommand {
         // the answer to a user
         return "Ok, goodbye.";
     }
+
+    @Override
+    public String getInfo() {
+        return "exit\n[closes the program and save data]";
+    }
 }

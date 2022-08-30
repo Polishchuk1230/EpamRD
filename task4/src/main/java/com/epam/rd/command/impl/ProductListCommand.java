@@ -16,4 +16,9 @@ public class ProductListCommand implements ICommand {
         }
         return "Unknown parameters in the command 'product list'.";
     }
+
+    @Override
+    public String getInfo() {
+        return "product list\n[displays all available products]";
+    }
 }
