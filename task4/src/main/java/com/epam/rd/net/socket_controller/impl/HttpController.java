@@ -76,4 +76,10 @@ public class HttpController implements ISocketController {
                 String.format("Content-Type: application/json\n\r\n\r" +
                         "{\"name\":\"%s\", \"price\":%.2f}", product.getName(), product.getPrice()));
     }
+
+    @GetMapping("/message")
+    public String method(@RequestParam("p1") String p1, @RequestParam("p2") String p2) {
+        return HttpResponseHeaders.addFirstHeaders200("Content-Type: text/html; charset=UTF-8\n\r\n\r" +
+                p1 + ", " + p2);
+    }
 }
