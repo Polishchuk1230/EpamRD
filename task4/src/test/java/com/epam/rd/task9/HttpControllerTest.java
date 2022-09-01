@@ -10,7 +10,7 @@ public class HttpControllerTest {
     @Test
     public void badRequestsTest() {
         HttpController controller = new HttpController();
-        String expected = HttpResponseHeaders.addFirstHeaders404();
+        String expected = HttpResponseHeaders.RESPONSE_STATUS_CODE_404;
 
         // not valid requests
         Assert.assertEquals(expected, controller.processRequest("GET /wrong_request HTTP/1.1")); // there isn't a method annotated with @GetMapping("/wrong_request")
