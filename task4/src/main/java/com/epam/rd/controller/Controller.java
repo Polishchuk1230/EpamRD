@@ -1,9 +1,18 @@
 package com.epam.rd.controller;
 
 import com.epam.rd.command.ICommand;
-import com.epam.rd.command.impl.*;
+import com.epam.rd.command.impl.ExitCommand;
+import com.epam.rd.command.impl.CartAddCommand;
+import com.epam.rd.command.impl.CartListCommand;
+import com.epam.rd.command.impl.OrderCreateCommand;
+import com.epam.rd.command.impl.OrderListCommand;
+import com.epam.rd.command.impl.ProductAddRandomCommand;
+import com.epam.rd.command.impl.ProductAddHandleCommand;
+import com.epam.rd.command.impl.ProductListCommand;
+import com.epam.rd.command.impl.LocaleSetCommand;
 
-import java.util.*;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;

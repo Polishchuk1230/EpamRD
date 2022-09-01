@@ -5,7 +5,6 @@ import com.epam.rd.controller.Controller;
 import com.epam.rd.controller.IController;
 import com.epam.rd.net.socket_connection.SocketConnectionFactory;
 import com.epam.rd.net.socket_controller.ISocketController;
-import com.epam.rd.net.socket_controller.impl.TcpController;
 import com.epam.rd.net.socket_server.SocketServer;
 import com.epam.rd.pojo.GamingChair;
 import com.epam.rd.pojo.RockingChair;
