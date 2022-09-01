@@ -1,20 +1,10 @@
 package com.epam.rd.net.socket_controller.util;
 
-import java.util.StringJoiner;
-
 public class HttpResponseHeaders {
-    public static String addFirstHeaders200(String answer) {
-        StringJoiner stringJoiner = new StringJoiner("\n\r");
-        stringJoiner.add("HTTP/1.1 200 OK");
-        stringJoiner.add(answer);
-        return stringJoiner.toString();
-    }
+    public static String CONTENT_TYPE_JSON = "Content-Type: application/json\n\r";
+    public static String CONTENT_TYPE_TEXT_HTML = "Content-Type: text/html; charset=UTF-8\n\r";
 
-    public static String addFirstHeaders400() {
-        return "HTTP/1.1 400 bad request";
-    }
-
-    public static String addFirstHeaders404() {
-        return "HTTP/1.1 404 not found";
-    }
+    public static String RESPONSE_STATUS_CODE_200 = "HTTP/1.1 200 OK\n\r";
+    public static String RESPONSE_STATUS_CODE_400 = "HTTP/1.1 400 bad request\n\r";
+    public static String RESPONSE_STATUS_CODE_404 = "HTTP/1.1 404 not found\n\r";
 }
