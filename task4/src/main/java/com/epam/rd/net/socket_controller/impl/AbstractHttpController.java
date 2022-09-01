@@ -16,8 +16,8 @@ import static com.epam.rd.net.socket_controller.util.HttpResponseHeaders.RESPONS
 import static com.epam.rd.net.socket_controller.util.HttpResponseHeaders.RESPONSE_STATUS_CODE_404;
 
 public abstract class AbstractHttpController implements ISocketController {
-    private static Logger logger = LogManager.getLogger(HttpController.class);
-    private static final Pattern PATTERN = Pattern.compile("^GET (?<path>[\\w/-]*)(?:\\?(?<parameters>((?<=\\?|&)\\w+=\\w+&?)+))? HTTP/1.1$");
+    private static Logger logger = LogManager.getLogger(AbstractHttpController.class);
+    private static final Pattern PATTERN = Pattern.compile("^GET (?<path>[\\w/-]*)(?:\\?(?<parameters>((?<=[?&])\\w+=\\w+&?)++))? HTTP/1.1$");
 
     @Override
     public String processRequest(String command) {
