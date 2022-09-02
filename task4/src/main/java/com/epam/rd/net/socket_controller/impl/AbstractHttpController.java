@@ -2,6 +2,7 @@ package com.epam.rd.net.socket_controller.impl;
 
 import com.epam.rd.net.reflection.GetMappingHandler;
 import com.epam.rd.net.socket_controller.ISocketController;
+import com.epam.rd.net.socket_controller.util.StatusCodeHeader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,9 +13,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.epam.rd.net.socket_controller.util.HttpResponseHeaders.RESPONSE_STATUS_CODE_400;
-import static com.epam.rd.net.socket_controller.util.HttpResponseHeaders.RESPONSE_STATUS_CODE_404;
-
 public abstract class AbstractHttpController implements ISocketController {
     private static Logger logger = LogManager.getLogger(AbstractHttpController.class);
     private static final Pattern PATTERN = Pattern.compile("^GET (?<path>[\\w/-]*)(?:\\?(?<parameters>((?<=[?&])\\w+=\\w+&?)++))? HTTP/1.1$");
@@ -22,7 +20,7 @@ public abstract class AbstractHttpController implements ISocketController {
     @Override
     public String processRequest(String command) {
         if (command == null) {
-            return RESPONSE_STATUS_CODE_400;
+            return StatusCodeHeader.CODE_400.toString();
         }
 
         logger.info(command);
@@ -39,7 +37,7 @@ public abstract class AbstractHttpController implements ISocketController {
             }
         }
 
-        return RESPONSE_STATUS_CODE_404;
+        return StatusCodeHeader.CODE_404.toString();
     }
 
     /**

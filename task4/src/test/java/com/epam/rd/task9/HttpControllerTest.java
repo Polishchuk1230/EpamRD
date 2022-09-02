@@ -1,7 +1,7 @@
 package com.epam.rd.task9;
 
 import com.epam.rd.net.socket_controller.impl.HttpController;
-import com.epam.rd.net.socket_controller.util.HttpResponseHeaders;
+import com.epam.rd.net.socket_controller.util.StatusCodeHeader;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,7 +10,7 @@ public class HttpControllerTest {
     @Test
     public void badRequestsTest() {
         HttpController controller = new HttpController();
-        String expected = HttpResponseHeaders.RESPONSE_STATUS_CODE_404;
+        String expected = StatusCodeHeader.CODE_404.toString();
 
         // not valid requests
         Assert.assertEquals(expected, controller.processRequest("GET /wrong_request HTTP/1.1")); // there isn't a method annotated with @GetMapping("/wrong_request")

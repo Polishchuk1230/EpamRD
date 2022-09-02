@@ -32,7 +32,7 @@ public class GetMappingHandler {
                 .toArray();
 
         try {
-            return (String) method.invoke(controller, objects);
+            return String.valueOf(method.invoke(controller, objects));
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new CustomException("Exception during method invoking.");
         }
