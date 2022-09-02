@@ -36,4 +36,10 @@ public class CartAddCommand implements ICommand {
 
         return "Unknown parameters of the command 'cart add'";
     }
+
+    @Override
+    public String getInfo() {
+        return "cart add -id PRODUCT_ID -x AMOUNT" +
+                " \n[adds specified product to the cart]";
+    }
 }

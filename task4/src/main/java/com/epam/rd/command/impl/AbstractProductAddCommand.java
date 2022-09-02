@@ -38,6 +38,11 @@ public abstract class AbstractProductAddCommand implements ICommand {
         return "Successfully added to the products: \n" + newProduct;
     }
 
+    @Override
+    public String getInfo() {
+        return "product add\n[adds a new product to the shop (This command's sentence depends on the current locale. Type \"product add\" to get more info)]";
+    }
+
     protected Product parseProduct(String productType, String parameters) {
         Function<String, Product> parser = parsers.get(productType);
         if (parser != null) {

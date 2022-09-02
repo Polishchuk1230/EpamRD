@@ -5,4 +5,6 @@ package com.epam.rd.command;
  */
 public interface ICommand {
     String execute(String command);
+
+    String getInfo();
 }

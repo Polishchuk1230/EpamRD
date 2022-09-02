@@ -26,4 +26,10 @@ public class OrderCreateCommand implements ICommand {
 
         return "Unknown parameters of the command 'order create'";
     }
+
+    @Override
+    public String getInfo() {
+        return "order create" +
+                "\n[purchases everything inside the bucket]";
+    }
 }

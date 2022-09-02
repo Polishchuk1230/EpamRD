@@ -2,7 +2,8 @@ package com.epam.rd.service.impl;
 
 import com.epam.rd.service.ILocalizationService;
 
-import java.util.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class LocalizationService implements ILocalizationService {
     ResourceBundle resourceBundle;
