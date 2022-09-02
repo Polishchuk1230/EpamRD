@@ -1,4 +1,4 @@
-package com.epam.rd.net.socket_controller.util;
+package com.epam.rd.net.socket_controller.http_response;
 
 public enum TypeContentHeader {
     JSON("Content-Type: application/json\n\r"),

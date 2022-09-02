@@ -2,7 +2,7 @@ package com.epam.rd.net.socket_controller.impl;
 
 import com.epam.rd.net.reflection.GetMappingHandler;
 import com.epam.rd.net.socket_controller.ISocketController;
-import com.epam.rd.net.socket_controller.util.StatusCodeHeader;
+import com.epam.rd.net.socket_controller.http_response.StatusCodeHeader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

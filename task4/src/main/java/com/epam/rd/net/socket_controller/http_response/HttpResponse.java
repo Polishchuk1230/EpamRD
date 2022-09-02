@@ -1,4 +1,4 @@
-package com.epam.rd.net.socket_controller.util;
+package com.epam.rd.net.socket_controller.http_response;
 
 public class HttpResponse {
 

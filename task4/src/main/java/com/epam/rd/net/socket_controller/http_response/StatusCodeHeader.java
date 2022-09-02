@@ -1,4 +1,4 @@
-package com.epam.rd.net.socket_controller.util;
+package com.epam.rd.net.socket_controller.http_response;
 
 public enum StatusCodeHeader {
     CODE_400("HTTP/1.1 400 bad request\n\r"),

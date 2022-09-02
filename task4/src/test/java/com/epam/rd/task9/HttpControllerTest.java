@@ -1,7 +1,7 @@
 package com.epam.rd.task9;
 
 import com.epam.rd.net.socket_controller.impl.HttpController;
-import com.epam.rd.net.socket_controller.util.StatusCodeHeader;
+import com.epam.rd.net.socket_controller.http_response.StatusCodeHeader;
 import org.junit.Assert;
 import org.junit.Test;
 
