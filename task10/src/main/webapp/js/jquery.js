@@ -1,81 +1,58 @@
 $(document).ready(function () {
-    // vlidate username
+    // username
     let usernameIsValid = true;
-    $("#usercheck").hide();
+    let usernameErrorElem = $("#usercheck");
+    usernameErrorElem.hide();
 
-    $("#username").keyup(function () {
-        usernameIsValid = validateUsername();
-    });
-
-    function validateUsername() {
-        let usernameValue = $("#username").val();
-        if (usernameValue == "") {
-            $("#usercheck").html("Username is missing.");
-            $("#usercheck").show();
-            return false;
-        } else if (usernameValue.length < 4 || usernameValue.length > 10) {
-            $("#usercheck").html("Username should be from 4 to 10 characters.");
-            $("#usercheck").show();
-            return false;
-        } else {
-            $("#usercheck").hide();
-            return true;
-        }
-    }
-
-    // validate password
-    let passwordIsValid = true;
-    $("#passcheck").hide();
-
-    $("#password").keyup(function () {
-        passwordIsValid = validatePassword();
-    });
-
-    function validatePassword() {
-        let passwordValue = $("#password").val();
-        if (passwordValue == "") {
-            $("#passcheck").html("Password is missing.");
-            $("#passcheck").show();
-            return false;
-        } else if (passwordValue.length < 4 || passwordValue.length > 10) {
-            $("#passcheck").html("Password should be from 4 to 10 characters.");
-            $("#passcheck").show();
-            return false;
-        } else {
-            $("#passcheck").hide();
-            return true;
-        }
-    }
-
-    // validate phone number
+    // phone number
     let phoneIsValid = true;
-    $("#phonecheck").hide();
+    let phoneErrorElem = $("#phonecheck");
+    phoneErrorElem.hide();
 
-    $("#phone-number").keyup(function () {
-        phoneIsValid = validatePhoneNumber();
-    });
-
-    function validatePhoneNumber() {
-        let regex = /^\+?[\d \-()]{10,18}$/;
-        let phoneValue = $("#phone-number").val();
-        if (!regex.test(phoneValue)) {
-            $("#phonecheck").html("Phone number pattern: +12 (345) 678-90-12");
-            $("#phonecheck").show();
-            return false;
-        } else {
-            $("#phonecheck").hide();
-            return true;
-        }
-    }
+    // password
+    let passwordIsValid = true;
+    let passErrorElem = $("#passcheck");
+    passErrorElem.hide();
+    let passRepeatErrorElem = $("#passrepeatcheck");
+    passRepeatErrorElem.hide();
 
     // submit button
-    $("submitbtn").click(function () {
-        usernameIsValid = validateUsername();
-        passwordIsValid = validatePassword();
-        phoneIsValid = validatePhoneNumber();
+    $("#submitbtn").click(function () {
+        passwordElem = $("#password");
+        passwordIsValid = validate(passwordElem.val(), /^\w{4,10}$/, passErrorElem);
+        usernameIsValid = validate($("#username").val(), /^[a-zA-Z_]{4,10}$/, usernameErrorElem, "Wrong username");
+        phoneIsValid = validate($("#phone-number").val(), /^\+?[\d \-()]{10,18}$/, phoneErrorElem, "Phone number pattern: +12 (345) 678-90-12");
 
-        if (usernameIsValid && passwordIsValid && phoneIsValid) {
+        let checkPassword = (currentPassword) => {
+            if ($("#password-repeat").val() != currentPassword) {
+                passRepeatErrorElem.show();
+                return false;
+            }
+            passRepeatErrorElem.hide();
+            return true;
+        };
+
+        passRepeatErrorElem.hide();
+        if (usernameIsValid && passwordIsValid && phoneIsValid && checkPassword(passwordElem.val())) {
             $("#regform").submit();
         }
     });
 });
+
+// function to validate html-element value with regex
+function validate(value, regex, errorElem, errorMessage) {
+    if (!value) {
+        errorElem.html("Value is missing.");
+        errorElem.show();
+        return false;
+    }
+
+    if (!regex.test(value)) {
+        errorElem.html(errorMessage ? errorMessage : "Value is wrong");
+        errorElem.show();
+        return false;
+    }
+
+    errorElem.hide();
+    return true;
+}

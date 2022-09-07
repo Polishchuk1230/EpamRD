@@ -1,71 +1,70 @@
-let button = document.getElementById("submitbtn");
-
-button.onclick = function () {
-    validateUsername();
-    validatePassword();
-    validatePhoneNumber();
-
-    if (usernameIsValid && passwordIsValid && phoneIsValid) {
-        console.log("send a request");
-    }
-}
-
-// validate username
+// username
 let usernameIsValid = true;
-document.getElementById("usercheck").setAttribute("hidden", "hidden");
-function validateUsername() {
-    let usernameInput = document.getElementById("username");
-    let usercheck = document.getElementById("usercheck");
+let usernameErrorElem = document.getElementById("usercheck");
+hide(usernameErrorElem);
 
-    if (usernameInput.value == "") {
-        usercheck.innerText = "Username is missing.";
-        usercheck.removeAttribute("hidden");
-        usernameIsValid = false;
-    } else if (usernameInput.value.length < 4 || usernameInput.value.length > 10) {
-        usercheck.innerText = "Username should be from 4 to 10 characters.";
-        usercheck.removeAttribute("hidden");
-        usernameIsValid = false;
-    } else {
-        usercheck.setAttribute("hidden", "hidden");
-        usernameIsValid = true;
-    }
-}
-
-// validate password
-let passwordIsValid = true;
-document.getElementById("passcheck").setAttribute("hidden", "hidden");
-function validatePassword() {
-    let passwordInput = document.getElementById("password");
-    let passheck = document.getElementById("passcheck");
-
-    if (passwordInput.value == "") {
-        passheck.innerText = "Password is missing.";
-        passheck.removeAttribute("hidden");
-        passwordIsValid = false;
-    } else if (passwordInput.value.length < 4 || passwordInput.value.length > 10) {
-        passheck.innerText = "Password should be from 4 to 10 characters.";
-        passheck.removeAttribute("hidden");
-        passwordIsValid = false;
-    } else {
-        passheck.setAttribute("hidden", "hidden");
-        passwordIsValid = true;
-    }
-}
-
-// validate password
+// phone number
 let phoneIsValid = true;
-document.getElementById("phonecheck").setAttribute("hidden", "hidden");
-function validatePhoneNumber() {
-    let regex = /^\+?[\d \-()]{10,18}$/;
-    let passwordInput = document.getElementById("phone-number");
-    let phonecheck = document.getElementById("phonecheck");
+let phoneErrorElem = document.getElementById("phonecheck");
+hide(phoneErrorElem);
 
-    if (!regex.test(passwordInput.value)) {
-        phonecheck.innerText = "Phone number pattern: +12 (345) 678-90-12";
-        phonecheck.removeAttribute("hidden");
-        phoneIsValid = false;
-    } else {
-        phonecheck.setAttribute("hidden", "hidden");
-        phoneIsValid = true;
+// password
+let passwordIsValid = true;
+let passErrorElem = document.getElementById("passcheck");
+hide(passErrorElem);
+let passRepeatErrorElem = document.getElementById("passrepeatcheck");
+hide(passRepeatErrorElem);
+
+// process the submit button's clicks
+let button = document.getElementById("submitbtn");
+button.onclick = function () {
+    let passwordElem = document.getElementById("password");
+    passwordIsValid = validate(passwordElem.value, /^\w{4,10}$/, passErrorElem);
+
+    let usernameElem = document.getElementById("username");
+    usernameIsValid = validate(usernameElem.value, /^[a-zA-Z_]{4,10}$/, usernameErrorElem, "Wrong username");
+
+    let phoneElem = document.getElementById("phone-number");
+    phoneIsValid = validate(phoneElem.value, /^\+?[\d \-()]{10,18}$/, phoneErrorElem, "Phone number pattern: +12 (345) 678-90-12");
+
+    let checkPassword = (currentPassword) => {
+        if (document.getElementById("password-repeat").value != currentPassword) {
+            show(passRepeatErrorElem);
+            return false;
+        }
+        hide(passRepeatErrorElem);
+        return true;
+    };
+
+    hide(passRepeatErrorElem);
+    if (usernameIsValid && passwordIsValid && phoneIsValid && checkPassword(passwordElem.value)) {
+        document.getElementById("regform").submit();
     }
+}
+
+// function to validate html-element value with regex
+function validate(value, regex, errorElem, errorMessage) {
+console.log(value);
+    if (!value) {
+        errorElem.innerText = "Value is missing.";
+        show(errorElem);
+        return false;
+    }
+
+    if (!regex.test(value)) {
+        errorElem.innerText = errorMessage ? errorMessage : "Value is wrong.";
+        show(errorElem);
+        return false;
+    }
+
+    hide(errorElem);
+    return true;
+}
+
+function hide(elem) {
+    elem.setAttribute("hidden", "hidden");
+}
+
+function show(elem) {
+    elem.removeAttribute("hidden");
 }
