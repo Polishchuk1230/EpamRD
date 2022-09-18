@@ -3,10 +3,10 @@ let usernameIsValid = true;
 let usernameErrorElem = document.getElementById("usercheck");
 hide(usernameErrorElem);
 
-// phone number
-let phoneIsValid = true;
-let phoneErrorElem = document.getElementById("phonecheck");
-hide(phoneErrorElem);
+// email
+let emailIsValid = true;
+let emailErrorElem = document.getElementById("emailcheck");
+hide(emailErrorElem);
 
 // password
 let passwordIsValid = true;
@@ -22,10 +22,10 @@ button.onclick = function () {
     passwordIsValid = validate(passwordElem.value, /^\w{4,10}$/, passErrorElem);
 
     let usernameElem = document.getElementById("username");
-    usernameIsValid = validate(usernameElem.value, /^[a-zA-Z_]{4,10}$/, usernameErrorElem, "Wrong username");
+    usernameIsValid = validate(usernameElem.value, /^\w{4,10}$/, usernameErrorElem, "Wrong username");
 
-    let phoneElem = document.getElementById("phone-number");
-    phoneIsValid = validate(phoneElem.value, /^\+?[\d \-()]{10,18}$/, phoneErrorElem, "Phone number pattern: +12 (345) 678-90-12");
+    let emailElem = document.getElementById("email");
+    emailIsValid = validate(emailElem.value, /^\w+@[\w.]+.[a-zA-Z]{1,3}$/, emailErrorElem, "Email pattern: Your_email@xxxxxx.yyy");
 
     let checkPassword = (currentPassword) => {
         if (document.getElementById("password-repeat").value != currentPassword) {
@@ -37,7 +37,7 @@ button.onclick = function () {
     };
 
     hide(passRepeatErrorElem);
-    if (usernameIsValid && passwordIsValid && phoneIsValid && checkPassword(passwordElem.value)) {
+    if (usernameIsValid && passwordIsValid && emailIsValid && checkPassword(passwordElem.value)) {
         document.getElementById("regform").submit();
     }
 }
