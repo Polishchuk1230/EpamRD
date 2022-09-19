@@ -11,6 +11,7 @@ import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 
 import java.util.HashMap;
+import java.util.ResourceBundle;
 
 /**
  * A listener which initialize the ApplicationContext when the application starts.
@@ -42,8 +43,7 @@ public class ApplicationContextInitializer implements ServletContextListener {
         context.setAttribute("captchaStorage", new HashMap<String, String>());
 
         // here we choose one of three possible ways to store the captch's key.
-//        context.setAttribute("captchaStorageMethod", "session");
-        context.setAttribute("captchaStorageMethod", "cookie");
-//        context.setAttribute("captchaStorageMethod", "hiddenTag");
+        ResourceBundle settings = ResourceBundle.getBundle("settings");
+        context.setAttribute("captchaStorageMethod", settings.getString("captchaStorageMethod"));
     }
 }
