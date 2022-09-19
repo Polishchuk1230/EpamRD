@@ -1,23 +1,20 @@
 package com.epam.rd.dao.impl;
 
+import com.epam.rd.context.ApplicationContext;
+import com.epam.rd.context.util.BeanName;
 import com.epam.rd.dao.IUserDao;
 import com.epam.rd.entity.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
  * IUserDao implementation based on the constant List of Users
  */
-public class UserDaoListImpl implements IUserDao {
-    private final List<User> storage = new ArrayList<>(Arrays.asList(
-            new User(4, "racoon24", "Oleg", "Enotov", "racoon24@gmail.com", null),
-            new User(17, "asdf", "Jon", "Smith", "smith_mail@gmail.com", null)
-    ));
+public class UserDaoImpl implements IUserDao {
+    private final List<User> storage = (ArrayList<User>) ApplicationContext.getInstance().getAttribute(BeanName.USERS);
 
     @Override
     public List<User> findAll() {
@@ -47,25 +44,15 @@ public class UserDaoListImpl implements IUserDao {
 
     @Override
     public boolean add(User newUser) {
-        // another check control data
-        for (User user : storage) {
-            if (newUser.getId() == user.getId() ||
-                    newUser.getLogin().equals(user.getLogin()) ||
-                    newUser.getEmail().equalsIgnoreCase(user.getEmail())) {
-                return false;
-            }
-        }
-
         // generate new id (not 0)
-        if (newUser.getId() == 0) {
-            int id = Optional.ofNullable(storage.get(storage.size() - 1))
-                    .map(user -> user.getId() + 1)
-                    .orElse(1);
+        if (storage.isEmpty()) {
+            newUser.setId(1);
+        } else if (newUser.getId() == 0) {
+            int id = storage.get(storage.size() - 1).getId() + 1;
             newUser.setId(id);
         }
 
-        storage.add(newUser);
-        return true;
+        return storage.add(newUser);
     }
 
     @Override

@@ -1,12 +1,13 @@
 package com.epam.rd;
 
 import com.epam.rd.context.ApplicationContext;
+import com.epam.rd.context.util.BeanName;
 import com.epam.rd.dao.IUserDao;
-import com.epam.rd.dao.impl.UserDaoListImpl;
+import com.epam.rd.dao.impl.UserDaoImpl;
 import com.epam.rd.entity.User;
 import com.epam.rd.service.IUserService;
 import com.epam.rd.service.impl.UserService;
-import com.epam.rd.servlet.Registration;
+import com.epam.rd.servlet.RegistrationServlet;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -17,7 +18,9 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RegistrationServletTest extends Mockito {
@@ -48,22 +51,26 @@ public class RegistrationServletTest extends Mockito {
 
         // mock ApplicationContext
         ServletContext mockedServletContext = Mockito.mock(ServletContext.class);
-        Mockito.when(mockedServletContext.getAttribute("captchaStorageMethod")).thenReturn(captchaStorageMethod);
+        Mockito.when(mockedServletContext.getAttribute(BeanName.CAPTCHA_STORAGE_METHOD)).thenReturn(captchaStorageMethod);
 
         Map<String, String> captchaStorage = new HashMap<>(Map.of(captchaKey, "a1b2c3"));
-        Mockito.when(mockedServletContext.getAttribute("captchaStorage")).thenReturn(captchaStorage);
-
-        IUserDao userDao = new UserDaoListImpl();
-        Mockito.when(mockedServletContext.getAttribute("userDao")).thenReturn(userDao);
-
-        IUserService userService = new UserService(userDao);
-        Mockito.when(mockedServletContext.getAttribute("userService")).thenReturn(userService);
+        Mockito.when(mockedServletContext.getAttribute(BeanName.CAPTCHA_STORAGE)).thenReturn(captchaStorage);
 
         ApplicationContext.create(mockedServletContext);
 
+        List<User> users = new ArrayList<>();
+        Mockito.when(mockedServletContext.getAttribute(BeanName.USERS)).thenReturn(users);
+
+        IUserDao userDao = new UserDaoImpl();
+        Mockito.when(mockedServletContext.getAttribute(BeanName.USER_DAO)).thenReturn(userDao);
+
+        IUserService userService = new UserService(userDao);
+        Mockito.when(mockedServletContext.getAttribute(BeanName.USER_SERVICE)).thenReturn(userService);
+
+        Mockito.when(mockedServletContext.getAttribute(BeanName.SUBSCRIPTIONS)).thenReturn(List.of());
 
         try {
-            new Registration().service(mockedRequest, mockedResponse);
+            new RegistrationServlet().service(mockedRequest, mockedResponse);
         } catch (ServletException | IOException e) {
             Assert.fail();
         }

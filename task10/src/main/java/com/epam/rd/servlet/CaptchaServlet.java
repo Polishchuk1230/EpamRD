@@ -2,7 +2,6 @@ package com.epam.rd.servlet;
 
 import com.epam.rd.context.ApplicationContext;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,7 +18,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @WebServlet("/cptch")
-public class Captcha extends HttpServlet {
+public class CaptchaServlet extends HttpServlet {
     private static Random random = new Random();
 
     @Override

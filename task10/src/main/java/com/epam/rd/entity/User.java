@@ -1,6 +1,8 @@
 package com.epam.rd.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User implements Serializable {
     private int id;
@@ -9,6 +11,7 @@ public class User implements Serializable {
     private String surname;
     private String email;
     private String password;
+    private List<String> subscriptions = new ArrayList<>();
 
     public User() {
     }
@@ -77,6 +80,14 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public List<String> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(List<String> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -86,6 +97,7 @@ public class User implements Serializable {
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", subscriptions=" + subscriptions +
                 '}';
     }
 }
