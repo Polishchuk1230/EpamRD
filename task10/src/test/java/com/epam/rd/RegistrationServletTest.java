@@ -5,14 +5,18 @@ import com.epam.rd.context.util.BeanName;
 import com.epam.rd.dao.IUserDao;
 import com.epam.rd.dao.impl.UserDaoImpl;
 import com.epam.rd.entity.User;
+import com.epam.rd.service.ICaptchaService;
 import com.epam.rd.service.IUserService;
+import com.epam.rd.service.impl.CaptchaService;
 import com.epam.rd.service.impl.UserService;
 import com.epam.rd.servlet.RegistrationServlet;
+import com.epam.rd.strategy.impl.CookieCaptchaStrategy;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -38,7 +42,7 @@ public class RegistrationServletTest extends Mockito {
         Mockito.when(mockedRequest.getMethod()).thenReturn("POST");
         Mockito.when(mockedRequest.getParameter("captcha")).thenReturn("a1b2c3");
 
-        Mockito.when(mockedRequest.getParameter("username")).thenReturn(expectedUser.getLogin());
+        Mockito.when(mockedRequest.getParameter("username")).thenReturn(expectedUser.getUsername());
         Mockito.when(mockedRequest.getParameter("name")).thenReturn(expectedUser.getName());
         Mockito.when(mockedRequest.getParameter("surname")).thenReturn(expectedUser.getSurname());
         Mockito.when(mockedRequest.getParameter("email")).thenReturn(expectedUser.getEmail());
@@ -54,7 +58,9 @@ public class RegistrationServletTest extends Mockito {
         Mockito.when(mockedServletContext.getAttribute(BeanName.CAPTCHA_STORAGE_METHOD)).thenReturn(captchaStorageMethod);
 
         Map<String, String> captchaStorage = new HashMap<>(Map.of(captchaKey, "a1b2c3"));
-        Mockito.when(mockedServletContext.getAttribute(BeanName.CAPTCHA_STORAGE)).thenReturn(captchaStorage);
+
+        ICaptchaService captchaService = new CaptchaService(new CookieCaptchaStrategy(), captchaStorage);
+        Mockito.when(mockedServletContext.getAttribute(BeanName.CAPTCHA_SERVICE)).thenReturn(captchaService);
 
         ApplicationContext.create(mockedServletContext);
 
@@ -75,10 +81,10 @@ public class RegistrationServletTest extends Mockito {
             Assert.fail();
         }
 
-        User actualUser = userDao.findByLogin(expectedUser.getLogin());
+        User actualUser = userDao.findByLogin(expectedUser.getUsername());
         Assert.assertEquals(expectedUser.getName(), actualUser.getName());
         Assert.assertEquals(expectedUser.getSurname(), actualUser.getSurname());
         Assert.assertEquals(expectedUser.getEmail(), actualUser.getEmail());
-        Assert.assertEquals(expectedUser.getPassword(), actualUser.getPassword());
+        Assert.assertEquals(DigestUtils.md2Hex(expectedUser.getPassword()), actualUser.getPassword());
     }
 }

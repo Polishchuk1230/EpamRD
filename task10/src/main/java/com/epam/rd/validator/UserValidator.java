@@ -5,29 +5,32 @@ import com.epam.rd.context.util.BeanName;
 import com.epam.rd.dao.IUserDao;
 import com.epam.rd.entity.User;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 
 public class UserValidator {
     private static IUserDao userDao = (IUserDao) ApplicationContext.getInstance().getAttribute(BeanName.USER_DAO);
 
-    public static Set<String> getInvalidFields(User user) {
-        Set<String> result = new HashSet<>();
+    public static boolean validate(User user, Map<String, Boolean> criticalFields) {
+        boolean result = true;
 
-        if (!validateLogin(user.getLogin())) {
-            result.add("login");
+        if (!validateLogin(user.getUsername())) {
+            result = false;
+            criticalFields.put("username", false);
         }
         if (!validateEmail(user.getEmail())) {
-            result.add("email");
+            result = false;
+            criticalFields.put("email", false);
         }
         if (!validatePassword(user.getPassword())) {
-            result.add("password");
+            result = false;
         }
         if (!validateName(user.getName())) {
-            result.add("name");
+            result = false;
+            criticalFields.put("name", false);
         }
         if (!validateName(user.getSurname())) {
-            result.add("surname");
+            result = false;
+            criticalFields.put("surname", false);
         }
 
         return result;

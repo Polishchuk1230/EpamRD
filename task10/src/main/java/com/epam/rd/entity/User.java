@@ -6,7 +6,7 @@ import java.util.List;
 
 public class User implements Serializable {
     private int id;
-    private String login;
+    private String username;
     private String name;
     private String surname;
     private String email;
@@ -16,16 +16,16 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String login, String name, String surname, String email) {
-        this.login = login;
+    public User(String username, String name, String surname, String email) {
+        this.username = username;
         this.name = name;
         this.surname = surname;
         this.email = email;
     }
 
-    public User(int id, String login, String name, String surname, String email, String password) {
+    public User(int id, String username, String name, String surname, String email, String password) {
         this.id = id;
-        this.login = login;
+        this.username = username;
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -40,12 +40,12 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getName() {
@@ -92,7 +92,7 @@ public class User implements Serializable {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", login='" + login + '\'' +
+                ", username='" + username + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +

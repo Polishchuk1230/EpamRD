@@ -1,13 +1,13 @@
 package com.epam.rd.context.util;
 
-public enum CaptchaStoreMethod {
+public enum CaptchaStorageMethod {
     COOKIE("cookie"),
     HIDDEN_TAG("hiddenTag"),
     SESSION("session");
 
     private String value;
 
-    CaptchaStoreMethod(String value) {
+    CaptchaStorageMethod(String value) {
         this.value = value;
     }
 

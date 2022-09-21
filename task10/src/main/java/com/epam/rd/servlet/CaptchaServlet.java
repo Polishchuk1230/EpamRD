@@ -1,6 +1,8 @@
 package com.epam.rd.servlet;
 
 import com.epam.rd.context.ApplicationContext;
+import com.epam.rd.context.util.BeanName;
+import com.epam.rd.service.ICaptchaService;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +15,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -26,20 +27,8 @@ public class CaptchaServlet extends HttpServlet {
         processRequest(req, resp);
     }
 
-    public static String generateKey() {
-        int iTotalChars = 6;
-
-        Map<String, String> captchaStorage = (Map<String, String>) ApplicationContext.getInstance().getAttribute("captchaStorage");
-        String key = System.currentTimeMillis() + "";
-
-        long randomLong = random.nextLong();
-        captchaStorage.put(key, (Long.toString(Math.abs(randomLong), 36)).substring(0, iTotalChars));
-
-        return key;
-    }
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Map<String, String> captchaStorage = (Map<String, String>) ApplicationContext.getInstance().getAttribute("captchaStorage");
+        ICaptchaService captchaService = (ICaptchaService) ApplicationContext.getInstance().getAttribute(BeanName.CAPTCHA_SERVICE);
         response.setContentType("image/jsp");
 
         int iHeight = 40;
@@ -47,8 +36,8 @@ public class CaptchaServlet extends HttpServlet {
 
         Font fntStyle = new Font("Arial", Font.BOLD, 30);
 
-        String sImageCode = Optional.ofNullable(captchaStorage.get(request.getParameter("key")))
-                .orElseThrow(() -> new RuntimeException("create captcha"));
+        String sImageCode = Optional.ofNullable(captchaService.getStorage().get(request.getParameter("key")))
+                .orElseThrow(() -> new RuntimeException("Wrong captcha key"));
 
         BufferedImage biImage = new BufferedImage(iWidth, iHeight, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2dImage = (Graphics2D) biImage.getGraphics();

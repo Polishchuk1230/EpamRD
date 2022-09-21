@@ -2,11 +2,18 @@ package com.epam.rd.listener;
 
 import com.epam.rd.context.ApplicationContext;
 import com.epam.rd.context.util.BeanName;
+import com.epam.rd.context.util.CaptchaStorageMethod;
 import com.epam.rd.dao.IUserDao;
 import com.epam.rd.dao.impl.UserDaoImpl;
 import com.epam.rd.entity.User;
+import com.epam.rd.service.ICaptchaService;
 import com.epam.rd.service.IUserService;
+import com.epam.rd.service.impl.CaptchaService;
 import com.epam.rd.service.impl.UserService;
+import com.epam.rd.strategy.ICaptchaStrategy;
+import com.epam.rd.strategy.impl.CookieCaptchaStrategy;
+import com.epam.rd.strategy.impl.HiddenTagCaptchaStrategy;
+import com.epam.rd.strategy.impl.SessionCaptchaStrategy;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
@@ -50,10 +57,15 @@ public class ApplicationContextInitializer implements ServletContextListener {
         List<String> possibleSubscriptions = new ArrayList<>(Arrays.asList("subscriptionME", "subscriptionAll"));
         context.setAttribute(BeanName.SUBSCRIPTIONS, possibleSubscriptions);
 
-        context.setAttribute(BeanName.CAPTCHA_STORAGE, new HashMap<String, String>());
-
-        // here we choose one of three possible ways to store the captch's key.
+        // here we choose one of three possible ways to store the captcha's key.
         ResourceBundle settings = ResourceBundle.getBundle("settings");
-        context.setAttribute(BeanName.CAPTCHA_STORAGE_METHOD, settings.getString(BeanName.CAPTCHA_STORAGE_METHOD));
+        ICaptchaStrategy captchaStrategy = null;
+        switch (CaptchaStorageMethod.valueOf(settings.getString(BeanName.CAPTCHA_STORAGE_METHOD))) {
+            case COOKIE: captchaStrategy = new CookieCaptchaStrategy(); break;
+            case HIDDEN_TAG: captchaStrategy = new HiddenTagCaptchaStrategy(); break;
+            case SESSION: captchaStrategy = new SessionCaptchaStrategy(); break;
+        }
+        ICaptchaService captchaService = new CaptchaService(captchaStrategy, new HashMap<>());
+        context.setAttribute(BeanName.CAPTCHA_SERVICE, captchaService);
     }
 }

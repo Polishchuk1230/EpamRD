@@ -2,26 +2,28 @@ package com.epam.rd.servlet;
 
 import com.epam.rd.context.ApplicationContext;
 import com.epam.rd.context.util.BeanName;
-import com.epam.rd.context.util.CaptchaStoreMethod;
 import com.epam.rd.entity.User;
+import com.epam.rd.service.ICaptchaService;
 import com.epam.rd.service.IUserService;
-import com.epam.rd.validator.CaptchaValidator;
 import com.epam.rd.validator.UserValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
-import java.util.Set;
 
 @WebServlet("/reg")
 public class RegistrationServlet extends HttpServlet {
-    public static final String REG_JSP = "jsp/registration.jsp";
+    private static final String REG_JSP = "jsp/registration.jsp";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -34,29 +36,27 @@ public class RegistrationServlet extends HttpServlet {
 
         String captcha = req.getParameter("captcha");
 
-        // receive a captcha key by one of three ways
-        String captchaKey = null;
-        String captchaStorageMethod = (String) ApplicationContext.getInstance().getAttribute(BeanName.CAPTCHA_STORAGE_METHOD);
-        if (captchaStorageMethod.equals(CaptchaStoreMethod.SESSION.toString())) {
-            captchaKey = (String) req.getSession().getAttribute("captcha");
-        } else if (captchaStorageMethod.equals(CaptchaStoreMethod.COOKIE.toString())) {
-            captchaKey = Arrays.stream(req.getCookies())
-                    .filter(c -> c.getName().equals("captcha"))
-                    .map(Cookie::getValue)
-                    .findFirst()
-                    .orElse(null);
-        } else if (captchaStorageMethod.equals(CaptchaStoreMethod.HIDDEN_TAG.toString())) {
-            captchaKey = req.getParameter("captchaKey");
-        }
+        ICaptchaService captchaService = (ICaptchaService) ApplicationContext.getInstance().getAttribute(BeanName.CAPTCHA_SERVICE);
 
-        Set<String> invalidFields = UserValidator.getInvalidFields(user);
-        if (!CaptchaValidator.validate(captchaKey, captcha) || !invalidFields.isEmpty()) {
-            putDataBack(req, user, invalidFields);
+        // receive a captcha key by one of three ways
+        String captchaKey = captchaService.getKey(req);
+
+        Map<String, Boolean> criticalFields = new HashMap<>(Map.of(
+                "username", true,
+                "name", true,
+                "surname", true,
+                "email", true
+        ));
+        if (!captchaService.validate(captchaKey, captcha) || !UserValidator.validate(user, criticalFields)) {
+            putDataBack(req, user, criticalFields);
             req.getRequestDispatcher(REG_JSP).forward(req, resp);
             return;
         }
 
         setUpSubscriptions(req, user);
+
+        // hash password
+        user.setPassword(DigestUtils.md2Hex(user.getPassword()));
 
         IUserService userService = (IUserService) ApplicationContext.getInstance().getAttribute(BeanName.USER_SERVICE);
         userService.addNewUser(user);
@@ -81,19 +81,27 @@ public class RegistrationServlet extends HttpServlet {
         return new User(0, username, name, surname, email, password);
     }
 
-    private static void putDataBack(HttpServletRequest req, User user, Set<String> invalidFields) {
-        if (!invalidFields.contains("login")) {
-            req.setAttribute("login", user.getLogin());
+    private static void putDataBack(HttpServletRequest req, User user, Map<String, Boolean> validFields) {
+        validFields.entrySet().stream()
+                .filter(Map.Entry::getValue)
+                .forEach(entry ->
+                        req.setAttribute(entry.getKey(), getFieldValue(user, entry.getKey())));
+    }
+
+    /**
+     * Get the value of the User's field using just a field name
+     */
+    private static String getFieldValue(User user, String fieldName) {
+        Method method = Arrays.stream(User.class.getMethods())
+                .filter(m -> m.getName().equalsIgnoreCase("get" + fieldName))
+                .findFirst()
+                .orElseThrow();
+        try {
+            return (String) method.invoke(user);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
         }
-        if (!invalidFields.contains("name")) {
-            req.setAttribute("name", user.getName());
-        }
-        if (!invalidFields.contains("surname")) {
-            req.setAttribute("surname", user.getSurname());
-        }
-        if (!invalidFields.contains("email")) {
-            req.setAttribute("email", user.getEmail());
-        }
+        return "We couldn't get the value";
     }
 
 }

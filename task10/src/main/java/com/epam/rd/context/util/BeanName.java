@@ -5,7 +5,7 @@ public class BeanName {
 
     public static final String USER_SERVICE = "userService";
 
-    public static final String CAPTCHA_STORAGE = "captchaStorage";
+    public static final String CAPTCHA_SERVICE = "captchaService";
 
     public static final String CAPTCHA_STORAGE_METHOD = "captchaStorageMethod";
 

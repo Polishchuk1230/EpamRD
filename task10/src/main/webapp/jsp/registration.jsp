@@ -41,7 +41,7 @@
             <p id="usercheck" class="px-3 mb-1 bg-warning text-dark">Username is missing</p>
             <p class="input-group">
                 <label for="username" class="input-group-text">Username</label>
-                <input name="username" id="username" type="text" class="form-control" value="${login}">
+                <input name="username" id="username" type="text" class="form-control" value="${username}">
             </p>
             <p class="input-group">
                 <label for="name" class="input-group-text">Name</label>
