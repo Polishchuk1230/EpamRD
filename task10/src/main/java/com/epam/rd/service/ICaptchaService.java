@@ -20,5 +20,5 @@ public interface ICaptchaService {
 
     CaptchaStorageMethod getStorageMethod();
 
-    boolean validate(String key, String value);
+    boolean checkCaptcha(String key, String value);
 }

@@ -47,7 +47,7 @@ public class RegistrationServlet extends HttpServlet {
                 "surname", true,
                 "email", true
         ));
-        if (!captchaService.validate(captchaKey, captcha) || !UserValidator.validate(user, criticalFields)) {
+        if (!captchaService.checkCaptcha(captchaKey, captcha) || !UserValidator.validate(user, criticalFields)) {
             putDataBack(req, user, criticalFields);
             req.getRequestDispatcher(REG_JSP).forward(req, resp);
             return;

@@ -56,7 +56,7 @@ public class CaptchaService implements ICaptchaService {
     }
 
     @Override
-    public boolean validate(String key, String value) {
+    public boolean checkCaptcha(String key, String value) {
         removeOldCaptchas();
 
         String captchaValue = captchaStorage.remove(key);
