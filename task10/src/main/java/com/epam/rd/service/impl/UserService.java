@@ -15,4 +15,14 @@ public class UserService implements IUserService {
     public boolean addNewUser(User user) {
         return userDao.add(user);
     }
+
+    @Override
+    public boolean isUsernameUnique(User user) {
+        return userDao.findByUsername(user.getUsername()) == null;
+    }
+
+    @Override
+    public boolean isEmailUnique(User user) {
+        return userDao.findByUsername(user.getEmail()) == null;
+    }
 }

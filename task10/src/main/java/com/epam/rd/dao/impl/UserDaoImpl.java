@@ -33,7 +33,7 @@ public class UserDaoImpl implements IUserDao {
     }
 
     @Override
-    public User findByLogin(String login) {
+    public User findByUsername(String login) {
         return findByPredicate.apply(user -> user.getUsername().equalsIgnoreCase(login));
     }
 

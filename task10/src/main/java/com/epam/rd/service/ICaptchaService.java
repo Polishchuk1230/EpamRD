@@ -4,8 +4,6 @@ import com.epam.rd.context.util.CaptchaStorageMethod;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.jsp.PageContext;
 
-import java.util.Map;
-
 public interface ICaptchaService {
 
     String generateKey();
@@ -16,9 +14,9 @@ public interface ICaptchaService {
 
     String getKey(HttpServletRequest request);
 
-    Map<String, String> getStorage();
+    String findByKey(String key);
 
     CaptchaStorageMethod getStorageMethod();
 
-    boolean checkCaptcha(String key, String value);
+    boolean validate(String key, String value);
 }

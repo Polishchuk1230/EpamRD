@@ -31,12 +31,21 @@ public class CaptchaServlet extends HttpServlet {
         ICaptchaService captchaService = (ICaptchaService) ApplicationContext.getInstance().getAttribute(BeanName.CAPTCHA_SERVICE);
         response.setContentType("image/jsp");
 
+        BufferedImage biImage = generateImage(request);
+
+        OutputStream osImage = response.getOutputStream();
+        ImageIO.write(biImage, "jpeg", osImage);
+    }
+
+    private static BufferedImage generateImage(HttpServletRequest request) {
+        ICaptchaService captchaService = (ICaptchaService) ApplicationContext.getInstance().getAttribute(BeanName.CAPTCHA_SERVICE);
+
         int iHeight = 40;
         int iWidth = 150;
 
         Font fntStyle = new Font("Arial", Font.BOLD, 30);
 
-        String sImageCode = Optional.ofNullable(captchaService.getStorage().get(request.getParameter("key")))
+        String sImageCode = Optional.ofNullable(captchaService.findByKey(request.getParameter("key")))
                 .orElseThrow(() -> new RuntimeException("Wrong captcha key"));
 
         BufferedImage biImage = new BufferedImage(iWidth, iHeight, BufferedImage.TYPE_INT_RGB);
@@ -52,9 +61,7 @@ public class CaptchaServlet extends HttpServlet {
             }
         }
 
-        OutputStream osImage = response.getOutputStream();
-        ImageIO.write(biImage, "jpeg", osImage);
-
         g2dImage.dispose();
+        return biImage;
     }
 }

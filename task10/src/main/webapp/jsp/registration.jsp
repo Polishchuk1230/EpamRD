@@ -39,24 +39,30 @@
         <h2>Registration form</h2>
         <form action="#" method="post" id="regform">
             <p id="usercheck" class="px-3 mb-1 bg-warning text-dark">Username is missing</p>
+            <c:if test="${not empty usernameIsNotUnique}">
+                <p class="px-3 mb-1 bg-danger text-dark">${usernameIsNotUnique}</p>
+            </c:if>
             <p class="input-group">
                 <label for="username" class="input-group-text">Username</label>
-                <input name="username" id="username" type="text" class="form-control" value="${username}">
+                <input name="username" id="username" type="text" class="form-control" value="${user.username}">
             </p>
             <p class="input-group">
                 <label for="name" class="input-group-text">Name</label>
-                <input name="name" id="name" type="text" class="form-control" value="${name}">
+                <input name="name" id="name" type="text" class="form-control" value="${user.name}">
             </p>
             <p class="input-group">
                 <label for="surname" class="input-group-text">Surname</label>
-                <input name="surname" id="surname" type="text" class="form-control" value="${surname}">
+                <input name="surname" id="surname" type="text" class="form-control" value="${user.surname}">
             </p>
             <p id="emailcheck" class="px-3 mb-1 bg-warning text-dark">Email is missing</p>
             <p class="input-group">
                 <label for="email" class="input-group-text">Email</label>
-                <input name="email" id="email" type="text" class="form-control" value="${email}">
+                <input name="email" id="email" type="text" class="form-control" value="${user.email}">
             </p>
             <p id="passcheck" class="px-3 mb-1 bg-warning text-dark">Password is missing</p>
+            <c:if test="${not empty emailIsNotUnique}">
+                <p class="px-3 mb-1 bg-danger text-dark">${emailIsNotUnique}</p>
+            </c:if>
             <p class="input-group">
                 <label for="password" class="input-group-text">Password</label>
                 <input name="password" id="password" type="text" class="form-control">

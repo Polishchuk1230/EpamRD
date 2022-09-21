@@ -14,11 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
 
 @WebServlet("/reg")
@@ -32,23 +27,36 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        IUserService userService = (IUserService) ApplicationContext.getInstance().getAttribute(BeanName.USER_SERVICE);
+
         User user = collectUser(req);
 
         String captcha = req.getParameter("captcha");
 
         ICaptchaService captchaService = (ICaptchaService) ApplicationContext.getInstance().getAttribute(BeanName.CAPTCHA_SERVICE);
+        captchaService.removeOldCaptchas();
 
         // receive a captcha key by one of three ways
         String captchaKey = captchaService.getKey(req);
 
-        Map<String, Boolean> criticalFields = new HashMap<>(Map.of(
-                "username", true,
-                "name", true,
-                "surname", true,
-                "email", true
-        ));
-        if (!captchaService.checkCaptcha(captchaKey, captcha) || !UserValidator.validate(user, criticalFields)) {
-            putDataBack(req, user, criticalFields);
+        if (!captchaService.validate(captchaKey, captcha) || !UserValidator.validate(user)) {
+            req.setAttribute("user", user);
+            req.getRequestDispatcher(REG_JSP).forward(req, resp);
+            return;
+        }
+
+        boolean usernameIsUnique = userService.isUsernameUnique(user);
+        boolean emailIsUnique = userService.isEmailUnique(user);
+        if (!usernameIsUnique || !emailIsUnique) {
+            if (!usernameIsUnique) {
+                req.setAttribute("usernameIsNotUnique", "Username is not free. Choose another one.");
+                user.setUsername(null);
+            }
+            if (!emailIsUnique) {
+                req.setAttribute("emailIsNotUnique", "Email is not free. Choose another one.");
+                user.setEmail(null);
+            }
+            req.setAttribute("user", user);
             req.getRequestDispatcher(REG_JSP).forward(req, resp);
             return;
         }
@@ -58,7 +66,6 @@ public class RegistrationServlet extends HttpServlet {
         // hash password
         user.setPassword(DigestUtils.md2Hex(user.getPassword()));
 
-        IUserService userService = (IUserService) ApplicationContext.getInstance().getAttribute(BeanName.USER_SERVICE);
         userService.addNewUser(user);
         resp.sendRedirect(req.getContextPath());
     }
@@ -79,29 +86,6 @@ public class RegistrationServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         return new User(0, username, name, surname, email, password);
-    }
-
-    private static void putDataBack(HttpServletRequest req, User user, Map<String, Boolean> validFields) {
-        validFields.entrySet().stream()
-                .filter(Map.Entry::getValue)
-                .forEach(entry ->
-                        req.setAttribute(entry.getKey(), getFieldValue(user, entry.getKey())));
-    }
-
-    /**
-     * Get the value of the User's field using just a field name
-     */
-    private static String getFieldValue(User user, String fieldName) {
-        Method method = Arrays.stream(User.class.getMethods())
-                .filter(m -> m.getName().equalsIgnoreCase("get" + fieldName))
-                .findFirst()
-                .orElseThrow();
-        try {
-            return (String) method.invoke(user);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return "We couldn't get the value";
     }
 
 }

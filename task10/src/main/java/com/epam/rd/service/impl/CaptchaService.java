@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.Set;
 
 public class CaptchaService implements ICaptchaService {
-    public static final int MAX_CAPTCHA_AGE = 1000 * 60 * 2;
+    private static final int MAX_CAPTCHA_AGE = 1000 * 60 * 2;
 
     private ICaptchaStrategy captchaStrategy;
 
@@ -56,9 +56,7 @@ public class CaptchaService implements ICaptchaService {
     }
 
     @Override
-    public boolean checkCaptcha(String key, String value) {
-        removeOldCaptchas();
-
+    public boolean validate(String key, String value) {
         String captchaValue = captchaStorage.remove(key);
         if (captchaValue == null) {
             return false;
@@ -68,8 +66,8 @@ public class CaptchaService implements ICaptchaService {
     }
 
     @Override
-    public Map<String, String> getStorage() {
-        return captchaStorage;
+    public String findByKey(String key) {
+        return captchaStorage.get(key);
     }
 
     @Override

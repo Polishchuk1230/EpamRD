@@ -9,7 +9,7 @@ public interface IUserDao {
 
     User findById(int id);
 
-    User findByLogin(String login);
+    User findByUsername(String login);
 
     User findByEmail(String email);
 

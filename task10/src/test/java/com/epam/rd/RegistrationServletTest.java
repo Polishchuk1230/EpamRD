@@ -81,7 +81,7 @@ public class RegistrationServletTest extends Mockito {
             Assert.fail();
         }
 
-        User actualUser = userDao.findByLogin(expectedUser.getUsername());
+        User actualUser = userDao.findByUsername(expectedUser.getUsername());
         Assert.assertEquals(expectedUser.getName(), actualUser.getName());
         Assert.assertEquals(expectedUser.getSurname(), actualUser.getSurname());
         Assert.assertEquals(expectedUser.getEmail(), actualUser.getEmail());

@@ -59,8 +59,9 @@ public class ApplicationContextInitializer implements ServletContextListener {
 
         // here we choose one of three possible ways to store the captcha's key.
         ResourceBundle settings = ResourceBundle.getBundle("settings");
-        ICaptchaStrategy captchaStrategy = null;
+        ICaptchaStrategy captchaStrategy;
         switch (CaptchaStorageMethod.valueOf(settings.getString(BeanName.CAPTCHA_STORAGE_METHOD))) {
+            default:
             case COOKIE: captchaStrategy = new CookieCaptchaStrategy(); break;
             case HIDDEN_TAG: captchaStrategy = new HiddenTagCaptchaStrategy(); break;
             case SESSION: captchaStrategy = new SessionCaptchaStrategy(); break;
