@@ -1,3 +1,7 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="my" uri="/myTags" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +23,7 @@
                 <a class="nav-link" href="index.html">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="registration.html">Registration <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="reg">Registration <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="items.html">Items</a>
@@ -35,16 +39,30 @@
         <h2>Registration form</h2>
         <form action="#" method="post" id="regform">
             <p id="usercheck" class="px-3 mb-1 bg-warning text-dark">Username is missing</p>
+            <c:if test="${not empty usernameIsNotUnique}">
+                <p class="px-3 mb-1 bg-danger text-dark">${usernameIsNotUnique}</p>
+            </c:if>
             <p class="input-group">
                 <label for="username" class="input-group-text">Username</label>
-                <input name="username" id="username" type="text" class="form-control">
+                <input name="username" id="username" type="text" class="form-control" value="${user.username}">
             </p>
-            <p id="phonecheck" class="px-3 mb-1 bg-warning text-dark">Phone number is missing</p>
             <p class="input-group">
-                <label for="phone-number" class="input-group-text">Phone-number</label>
-                <input name="phone-number" id="phone-number" type="text" class="form-control">
+                <label for="name" class="input-group-text">Name</label>
+                <input name="name" id="name" type="text" class="form-control" value="${user.name}">
+            </p>
+            <p class="input-group">
+                <label for="surname" class="input-group-text">Surname</label>
+                <input name="surname" id="surname" type="text" class="form-control" value="${user.surname}">
+            </p>
+            <p id="emailcheck" class="px-3 mb-1 bg-warning text-dark">Email is missing</p>
+            <p class="input-group">
+                <label for="email" class="input-group-text">Email</label>
+                <input name="email" id="email" type="text" class="form-control" value="${user.email}">
             </p>
             <p id="passcheck" class="px-3 mb-1 bg-warning text-dark">Password is missing</p>
+            <c:if test="${not empty emailIsNotUnique}">
+                <p class="px-3 mb-1 bg-danger text-dark">${emailIsNotUnique}</p>
+            </c:if>
             <p class="input-group">
                 <label for="password" class="input-group-text">Password</label>
                 <input name="password" id="password" type="text" class="form-control">
@@ -54,8 +72,23 @@
                 <label for="password-repeat" class="input-group-text">Password repeat</label>
                 <input name="password-repeat" id="password-repeat" type="text" class="form-control">
             </p>
+            <p class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="subscriptionAll" name="subscriptionAll" checked>
+              <label class="form-check-label" for="subscriptionAll">All news</label>
+            </p>
+            <p class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="subscriptionME" name="subscriptionME" checked>
+              <label class="form-check-label" for="subscriptionME">Main events</label>
+            </p>
             <p style="display: flex;flex-direction: row-reverse">
                 <input type="button" id="submitbtn" value="Register" class="btn btn-lg btn-primary">
+            </p>
+
+
+            <p class="input-group">
+                <label for="captcha" class="input-group-text">Captcha</label>
+                <input name="captcha" id="captcha" type="text" class="form-control">
+                <my:captcha></my:captcha>
             </p>
         </form>
 
@@ -63,7 +96,6 @@
     <div class="col"></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<!--<script src="js/jquery.js"></script>-->
 <script src="js/plainjs.js"></script>
 </body>
 </html>
