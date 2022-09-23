@@ -5,6 +5,7 @@ import com.epam.rd.context.util.BeanName;
 import com.epam.rd.entity.User;
 import com.epam.rd.service.ICaptchaService;
 import com.epam.rd.service.IUserService;
+import com.epam.rd.servlet.util.Parameters;
 import com.epam.rd.validator.UserValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,7 +20,6 @@ import java.util.List;
 @WebServlet("/reg")
 public class RegistrationServlet extends HttpServlet {
     private static final String REG_JSP = "jsp/registration.jsp";
-    private static final String CAPTCHA_PARAMETER = "captcha";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -32,7 +32,7 @@ public class RegistrationServlet extends HttpServlet {
 
         User user = collectUser(req);
 
-        String captcha = req.getParameter(CAPTCHA_PARAMETER);
+        String captcha = req.getParameter(Parameters.CAPTCHA_PARAMETER);
 
         ICaptchaService captchaService = (ICaptchaService) ApplicationContext.getInstance().getAttribute(BeanName.CAPTCHA_SERVICE);
         captchaService.removeOldCaptchas();
@@ -41,7 +41,7 @@ public class RegistrationServlet extends HttpServlet {
         String captchaKey = captchaService.getKey(req);
 
         if (!captchaService.validate(captchaKey, captcha) || !UserValidator.validate(user)) {
-            req.setAttribute("user", user);
+            req.setAttribute(Parameters.USER, user);
             req.getRequestDispatcher(REG_JSP).forward(req, resp);
             return;
         }
@@ -57,7 +57,7 @@ public class RegistrationServlet extends HttpServlet {
                 req.setAttribute("emailIsNotUnique", "Email is not free. Choose another one.");
                 user.setEmail(null);
             }
-            req.setAttribute("user", user);
+            req.setAttribute(Parameters.USER, user);
             req.getRequestDispatcher(REG_JSP).forward(req, resp);
             return;
         }
@@ -81,11 +81,11 @@ public class RegistrationServlet extends HttpServlet {
     }
 
     private static User collectUser(HttpServletRequest req) {
-        String username = req.getParameter("username");
-        String name = req.getParameter("name");
-        String surname = req.getParameter("surname");
-        String email = req.getParameter("email");
-        String password = req.getParameter("password");
+        String username = req.getParameter(Parameters.USER_USERNAME);
+        String name = req.getParameter(Parameters.USER_NAME);
+        String surname = req.getParameter(Parameters.USER_SURNAME);
+        String email = req.getParameter(Parameters.USER_EMAIL);
+        String password = req.getParameter(Parameters.USER_PASSWORD);
         return new User(0, username, name, surname, email, password);
     }
 

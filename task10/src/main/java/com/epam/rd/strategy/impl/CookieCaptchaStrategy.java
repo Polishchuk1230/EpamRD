@@ -1,6 +1,7 @@
 package com.epam.rd.strategy.impl;
 
 import com.epam.rd.context.util.CaptchaStorageMethod;
+import com.epam.rd.servlet.util.Parameters;
 import com.epam.rd.strategy.ICaptchaStrategy;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +15,7 @@ public class CookieCaptchaStrategy implements ICaptchaStrategy {
     @Override
     public String getKey(HttpServletRequest request) {
         return Arrays.stream(request.getCookies())
-                .filter(c -> c.getName().equals("captcha"))
+                .filter(c -> c.getName().equals(Parameters.CAPTCHA_PARAMETER))
                 .map(Cookie::getValue)
                 .findFirst()
                 .orElse(null);
@@ -22,7 +23,7 @@ public class CookieCaptchaStrategy implements ICaptchaStrategy {
 
     @Override
     public void storeKey(String key, PageContext pageContext) {
-        ((HttpServletResponse) pageContext.getResponse()).addCookie(new Cookie("captcha", key));
+        ((HttpServletResponse) pageContext.getResponse()).addCookie(new Cookie(Parameters.CAPTCHA_PARAMETER, key));
     }
 
     @Override
