@@ -19,6 +19,7 @@ import java.util.List;
 @WebServlet("/reg")
 public class RegistrationServlet extends HttpServlet {
     private static final String REG_JSP = "jsp/registration.jsp";
+    private static final String CAPTCHA_PARAMETER = "captcha";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,7 +32,7 @@ public class RegistrationServlet extends HttpServlet {
 
         User user = collectUser(req);
 
-        String captcha = req.getParameter("captcha");
+        String captcha = req.getParameter(CAPTCHA_PARAMETER);
 
         ICaptchaService captchaService = (ICaptchaService) ApplicationContext.getInstance().getAttribute(BeanName.CAPTCHA_SERVICE);
         captchaService.removeOldCaptchas();
