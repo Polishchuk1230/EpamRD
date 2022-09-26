@@ -24,11 +24,12 @@ public class CaptchaService implements ICaptchaService {
 
     @Override
     public String generateKey() {
+        Random random = new Random();
         int iTotalChars = 6;
 
-        String key = System.currentTimeMillis() + "";
+        String key = random.nextInt() + "-" + System.currentTimeMillis();
 
-        long randomLong = new Random().nextLong();
+        long randomLong = random.nextLong();
         captchaStorage.put(key, (Long.toString(Math.abs(randomLong), 36)).substring(0, iTotalChars));
 
         return key;
@@ -46,10 +47,11 @@ public class CaptchaService implements ICaptchaService {
 
     @Override
     public void removeOldCaptchas() {
-        long keysForDelete = System.currentTimeMillis() - MAX_CAPTCHA_AGE;
+        long timePointsForDelete = System.currentTimeMillis() - MAX_CAPTCHA_AGE;
         Set<String> keys = Set.copyOf(captchaStorage.keySet());
         for (String k : keys) {
-            if (Long.parseLong(k) < keysForDelete) {
+            long timePoint = Long.parseLong(k.substring(k.lastIndexOf('-')+1));
+            if (timePoint < timePointsForDelete) {
                 captchaStorage.remove(k);
             }
         }

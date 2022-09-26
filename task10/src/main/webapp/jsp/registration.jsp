@@ -20,7 +20,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="reg">Registration <span class="sr-only">(current)</span></a>
@@ -32,12 +32,16 @@
     </div>
 </nav>
 
+<div style="width: 300px; height: 200px;">
+    <jsp:include page="/jsp/auth.jsp" />
+</div>
+
 <div class="row">
     <div class="col"></div>
     <div class="col-md-6 col-sm-12">
         <!-- Registration form -->
         <h2>Registration form</h2>
-        <form action="#" method="post" id="regform">
+        <form action="#" method="post" enctype="multipart/form-data" id="regform">
             <p id="usercheck" class="px-3 mb-1 bg-warning text-dark">Username is missing</p>
             <c:if test="${not empty usernameIsNotUnique}">
                 <p class="px-3 mb-1 bg-danger text-dark">${usernameIsNotUnique}</p>
@@ -72,18 +76,22 @@
                 <label for="password-repeat" class="input-group-text">Password repeat</label>
                 <input name="password-repeat" id="password-repeat" type="text" class="form-control">
             </p>
-            <p class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="subscriptionAll" name="subscriptionAll" checked>
-              <label class="form-check-label" for="subscriptionAll">All news</label>
-            </p>
-            <p class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="subscriptionME" name="subscriptionME" checked>
-              <label class="form-check-label" for="subscriptionME">Main events</label>
-            </p>
+
+            <c:forEach var="sub" items="${subscriptions}">
+                <p class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="subscription" name="sub-${sub.name}" checked>
+                    <label class="form-check-label" for="subscription">${sub.name}</label>
+                </p>
+            </c:forEach>
+
             <p style="display: flex;flex-direction: row-reverse">
                 <input type="button" id="submitbtn" value="Register" class="btn btn-lg btn-primary">
             </p>
 
+            <p class="input-group">
+                <label class="input-group-text" for="avatar">Photo</label>
+                <input name="avatar" id="avatar" type="file" class="form-control" />
+            </p>
 
             <p class="input-group">
                 <label for="captcha" class="input-group-text">Captcha</label>

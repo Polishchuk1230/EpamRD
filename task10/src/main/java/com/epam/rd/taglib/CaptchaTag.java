@@ -1,7 +1,7 @@
 package com.epam.rd.taglib;
 
 import com.epam.rd.context.ApplicationContext;
-import com.epam.rd.context.util.BeanName;
+import com.epam.rd.context.util.BeanNames;
 import com.epam.rd.context.util.CaptchaStorageMethod;
 import com.epam.rd.service.ICaptchaService;
 import jakarta.servlet.jsp.tagext.TagSupport;
@@ -12,7 +12,7 @@ public class CaptchaTag extends TagSupport {
 
     @Override
     public int doStartTag() {
-        ICaptchaService captchaService = (ICaptchaService) ApplicationContext.getInstance().getAttribute(BeanName.CAPTCHA_SERVICE);
+        ICaptchaService captchaService = (ICaptchaService) ApplicationContext.getInstance().getAttribute(BeanNames.CAPTCHA_SERVICE);
         String key = captchaService.generateKey();
         captchaService.putKey(key, pageContext);
 
