@@ -1,7 +1,7 @@
 package com.epam.rd.dao.impl;
 
 import com.epam.rd.context.ApplicationContext;
-import com.epam.rd.context.util.BeanName;
+import com.epam.rd.context.util.BeanNames;
 import com.epam.rd.dao.IUserDao;
 import com.epam.rd.entity.User;
 
@@ -14,7 +14,7 @@ import java.util.function.Predicate;
  * IUserDao implementation based on the constant List of Users
  */
 public class UserDaoImpl implements IUserDao {
-    private final List<User> storage = (ArrayList<User>) ApplicationContext.getInstance().getAttribute(BeanName.USERS);
+    private final List<User> storage = (ArrayList<User>) ApplicationContext.getInstance().getAttribute(BeanNames.USERS);
 
     @Override
     public List<User> findAll() {

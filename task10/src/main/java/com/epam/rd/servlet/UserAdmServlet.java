@@ -1,8 +1,10 @@
 package com.epam.rd.servlet;
 
-import com.epam.rd.context.util.BeanName;
+import com.epam.rd.context.ApplicationContext;
+import com.epam.rd.context.util.BeanNames;
 import com.epam.rd.dao.IUserDao;
 import com.epam.rd.entity.User;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,10 +16,16 @@ import java.util.List;
 
 @WebServlet("/users")
 public class UserAdmServlet extends HttpServlet {
+    private IUserDao userDao;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        userDao = (IUserDao) ApplicationContext.getInstance().getAttribute(BeanNames.USER_DAO);
+        super.init(config);
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        IUserDao userDao = (IUserDao) req.getServletContext().getAttribute(BeanName.USER_DAO);
         List<User> users = userDao.findAll();
         for (User user : users) {
             resp.getWriter().println(user);

@@ -1,8 +1,10 @@
 package com.epam.rd.servlet;
 
 import com.epam.rd.context.ApplicationContext;
-import com.epam.rd.context.util.BeanName;
+import com.epam.rd.context.util.BeanNames;
 import com.epam.rd.service.ICaptchaService;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +22,15 @@ import java.util.Random;
 
 @WebServlet("/cptch")
 public class CaptchaServlet extends HttpServlet {
-    private static Random random = new Random();
+    private Random random = new Random();
+
+    private ICaptchaService captchaService;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        captchaService = (ICaptchaService) ApplicationContext.getInstance().getAttribute(BeanNames.CAPTCHA_SERVICE);
+        super.init(config);
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -28,7 +38,6 @@ public class CaptchaServlet extends HttpServlet {
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        ICaptchaService captchaService = (ICaptchaService) ApplicationContext.getInstance().getAttribute(BeanName.CAPTCHA_SERVICE);
         response.setContentType("image/jsp");
 
         BufferedImage biImage = generateImage(request);
@@ -37,9 +46,7 @@ public class CaptchaServlet extends HttpServlet {
         ImageIO.write(biImage, "jpeg", osImage);
     }
 
-    private static BufferedImage generateImage(HttpServletRequest request) {
-        ICaptchaService captchaService = (ICaptchaService) ApplicationContext.getInstance().getAttribute(BeanName.CAPTCHA_SERVICE);
-
+    private BufferedImage generateImage(HttpServletRequest request) {
         int iHeight = 40;
         int iWidth = 150;
 

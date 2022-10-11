@@ -8,4 +8,6 @@ public interface IUserService {
     boolean isUsernameUnique(User user);
 
     boolean isEmailUnique(User user);
+
+    User findByUsername(String username);
 }

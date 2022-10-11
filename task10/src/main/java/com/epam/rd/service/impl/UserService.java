@@ -23,6 +23,11 @@ public class UserService implements IUserService {
 
     @Override
     public boolean isEmailUnique(User user) {
-        return userDao.findByUsername(user.getEmail()) == null;
+        return userDao.findByEmail(user.getEmail()) == null;
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userDao.findByUsername(username);
     }
 }

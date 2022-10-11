@@ -4,12 +4,12 @@ import com.epam.rd.entity.User;
 
 import java.util.List;
 
-public interface IUserDao {
+public interface IUserDao extends IDao {
     List<User> findAll();
 
     User findById(int id);
 
-    User findByUsername(String login);
+    User findByUsername(String username);
 
     User findByEmail(String email);
 

@@ -1,14 +1,18 @@
 package com.epam.rd.listener;
 
 import com.epam.rd.context.ApplicationContext;
-import com.epam.rd.context.util.BeanName;
+import com.epam.rd.context.util.BeanNames;
 import com.epam.rd.context.util.CaptchaStorageMethod;
+import com.epam.rd.dao.ISubscriptionDao;
 import com.epam.rd.dao.IUserDao;
-import com.epam.rd.dao.impl.UserDaoImpl;
+import com.epam.rd.dao.impl.SubscriptionDao;
+import com.epam.rd.dao.impl.UserDaoMySQLImpl;
 import com.epam.rd.entity.User;
 import com.epam.rd.service.ICaptchaService;
+import com.epam.rd.service.ISubscriptionService;
 import com.epam.rd.service.IUserService;
 import com.epam.rd.service.impl.CaptchaService;
+import com.epam.rd.service.impl.SubscriptionService;
 import com.epam.rd.service.impl.UserService;
 import com.epam.rd.strategy.ICaptchaStrategy;
 import com.epam.rd.strategy.impl.CookieCaptchaStrategy;
@@ -46,27 +50,29 @@ public class ApplicationContextInitializer implements ServletContextListener {
                 new User(4, "racoon24", "Oleg", "Enotov", "racoon24@gmail.com", null),
                 new User(17, "asdf", "Jon", "Smith", "smith_mail@gmail.com", null)
         ));
-        context.setAttribute(BeanName.USERS, users);
+        context.setAttribute(BeanNames.USERS, users);
 
-        IUserDao userDao = new UserDaoImpl();
-        context.setAttribute(BeanName.USER_DAO, userDao);
+        IUserDao userDao = new UserDaoMySQLImpl();
+        context.setAttribute(BeanNames.USER_DAO, userDao);
 
         IUserService userService = new UserService(userDao);
-        context.setAttribute(BeanName.USER_SERVICE, userService);
-
-        List<String> possibleSubscriptions = new ArrayList<>(Arrays.asList("subscriptionME", "subscriptionAll"));
-        context.setAttribute(BeanName.SUBSCRIPTIONS, possibleSubscriptions);
+        context.setAttribute(BeanNames.USER_SERVICE, userService);
 
         // here we choose one of three possible ways to store the captcha's key.
         ResourceBundle settings = ResourceBundle.getBundle("settings");
         ICaptchaStrategy captchaStrategy;
-        switch (CaptchaStorageMethod.valueOf(settings.getString(BeanName.CAPTCHA_STORAGE_METHOD))) {
+        switch (CaptchaStorageMethod.valueOf(settings.getString(BeanNames.CAPTCHA_STORAGE_METHOD))) {
             default:
             case COOKIE: captchaStrategy = new CookieCaptchaStrategy(); break;
             case HIDDEN_TAG: captchaStrategy = new HiddenTagCaptchaStrategy(); break;
             case SESSION: captchaStrategy = new SessionCaptchaStrategy(); break;
         }
         ICaptchaService captchaService = new CaptchaService(captchaStrategy, new HashMap<>());
-        context.setAttribute(BeanName.CAPTCHA_SERVICE, captchaService);
+        context.setAttribute(BeanNames.CAPTCHA_SERVICE, captchaService);
+
+        // SubscriptionService
+        ISubscriptionDao subscriptionDao = new SubscriptionDao();
+        ISubscriptionService subscriptionService = new SubscriptionService(subscriptionDao);
+        context.setAttribute(BeanNames.SUBSCRIPTION_SERVICE, subscriptionService);
     }
 }

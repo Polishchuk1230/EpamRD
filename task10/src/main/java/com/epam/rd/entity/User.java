@@ -11,7 +11,8 @@ public class User implements Serializable {
     private String surname;
     private String email;
     private String password;
-    private List<String> subscriptions = new ArrayList<>();
+    private String avatar;
+    private List<Subscription> subscriptions = new ArrayList<>();
 
     public User() {
     }
@@ -80,12 +81,20 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public List<String> getSubscriptions() {
+    public List<Subscription> getSubscriptions() {
         return subscriptions;
     }
 
-    public void setSubscriptions(List<String> subscriptions) {
+    public void setSubscriptions(List<Subscription> subscriptions) {
         this.subscriptions = subscriptions;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     @Override
@@ -96,8 +105,7 @@ public class User implements Serializable {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", subscriptions=" + subscriptions +
+                ", password='" + password +
                 '}';
     }
 }
