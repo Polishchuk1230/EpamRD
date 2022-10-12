@@ -24,5 +24,22 @@ CREATE TABLE users_subscriptions (
     PRIMARY KEY(user_id, subscription_id),
     
     CONSTRAINT users_fk FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    CONSTRAINT subscrioptions_fk FOREIGN KEY (subscription_id) REFERENCES subscriptions (id) ON DELETE CASCADE
+    CONSTRAINT subscriptions_fk FOREIGN KEY (subscription_id) REFERENCES subscriptions (id) ON DELETE CASCADE
+);
+
+CREATE TABLE suppliers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50)
+);
+
+CREATE TABLE products (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50),
+    supplier_id INT,
+    category VARCHAR(50),
+    price DECIMAL(10, 2),
+    description VARCHAR(500),
+    image VARCHAR(100),
+
+    CONSTRAINT suppliers_fk FOREIGN KEY (supplier_id) REFERENCES suppliers (id) ON DELETE CASCADE
 );
