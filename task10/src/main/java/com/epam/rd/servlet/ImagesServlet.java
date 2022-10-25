@@ -1,7 +1,5 @@
 package com.epam.rd.servlet;
 
-import com.epam.rd.entity.User;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,13 +14,8 @@ import java.io.IOException;
 public class ImagesServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("image/jpeg");
-
-        User user = (User) request.getSession().getAttribute("user");
-        if (user == null) {
-            return;
-        }
 
         File file = new File(getServletContext().getInitParameter("images") + request.getParameter("file"));
         if (!file.exists()) {

@@ -26,7 +26,7 @@
                 <a class="nav-link" href="reg">Registration</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="items.html">Items</a>
+                <a class="nav-link" href="product">Items</a>
             </li>
         </ul>
     </div>

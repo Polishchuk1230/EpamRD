@@ -3,15 +3,19 @@ package com.epam.rd.listener;
 import com.epam.rd.context.ApplicationContext;
 import com.epam.rd.context.util.BeanNames;
 import com.epam.rd.context.util.CaptchaStorageMethod;
+import com.epam.rd.dao.IProductDao;
 import com.epam.rd.dao.ISubscriptionDao;
 import com.epam.rd.dao.IUserDao;
+import com.epam.rd.dao.impl.ProductDao;
 import com.epam.rd.dao.impl.SubscriptionDao;
 import com.epam.rd.dao.impl.UserDaoMySQLImpl;
 import com.epam.rd.entity.User;
 import com.epam.rd.service.ICaptchaService;
+import com.epam.rd.service.IProductService;
 import com.epam.rd.service.ISubscriptionService;
 import com.epam.rd.service.IUserService;
 import com.epam.rd.service.impl.CaptchaService;
+import com.epam.rd.service.impl.ProductService;
 import com.epam.rd.service.impl.SubscriptionService;
 import com.epam.rd.service.impl.UserService;
 import com.epam.rd.strategy.ICaptchaStrategy;
@@ -74,5 +78,10 @@ public class ApplicationContextInitializer implements ServletContextListener {
         ISubscriptionDao subscriptionDao = new SubscriptionDao();
         ISubscriptionService subscriptionService = new SubscriptionService(subscriptionDao);
         context.setAttribute(BeanNames.SUBSCRIPTION_SERVICE, subscriptionService);
+
+        // ProductService
+        IProductDao productDao = new ProductDao();
+        IProductService productService = new ProductService(productDao);
+        context.setAttribute(BeanNames.PRODUCT_SERVICE, productService);
     }
 }

@@ -17,4 +17,12 @@ public class Parameters {
     public static final String USER_PASSWORD = "password";
 
     public static final String USER = "user";
+
+    public static final String ITEMS_PER_PAGE = "items-per-page";
+
+    public static final String REVERSED = "reverse";
+
+    public static final String SORT = "sort";
+
+    public static final String PAGE = "page";
 }
