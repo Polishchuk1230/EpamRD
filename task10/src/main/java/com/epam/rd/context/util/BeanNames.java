@@ -14,4 +14,8 @@ public class BeanNames {
     public static final String SUBSCRIPTION_SERVICE = "subscriptionService";
 
     public static final String PRODUCT_SERVICE = "productService";
+
+    public static final String CART_SERVICE = "cartService";
+
+    public static final String ORDER_SERVICE = "orderService";
 }

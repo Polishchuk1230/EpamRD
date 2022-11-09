@@ -1,6 +1,7 @@
 package com.epam.rd.entity;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Product {
     private int id;
@@ -80,5 +81,24 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return getId() == product.getId() &&
+                Objects.equals(getName(), product.getName()) &&
+                Objects.equals(getSupplier(), product.getSupplier()) &&
+                Objects.equals(getCategory(), product.getCategory()) &&
+                Objects.equals(getPrice(), product.getPrice()) &&
+                Objects.equals(getDescription(), product.getDescription()) &&
+                Objects.equals(getImage(), product.getImage());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getSupplier(), getCategory(), getPrice(), getDescription(), getImage());
     }
 }

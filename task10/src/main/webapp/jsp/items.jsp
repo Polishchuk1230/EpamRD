@@ -30,6 +30,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="product">Items <span class="sr-only">(current)</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="cart">Cart</a>
+            </li>
         </ul>
     </div>
 </nav>
@@ -106,7 +109,7 @@
             </c:if>
                 <h5 class="card-title">(${product.category}) ${product.supplier.name}</h5>
                 <p class="card-text">${product.description}</p>
-                <a href="#" class="btn btn-primary">Buy ${product.price} $</a>
+                <a href="#" class="btn btn-primary" onclick="addToCart({ productId: ${product.id}, number: Number(prompt('How many?')) })">Add to cart ${product.price} $</a>
             </div>
         </div>
     </c:forEach>
@@ -133,5 +136,6 @@
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="js/jsonRequests.js"></script>
 </body>
 </html>

@@ -43,3 +43,45 @@ CREATE TABLE products (
 
     CONSTRAINT suppliers_fk FOREIGN KEY (supplier_id) REFERENCES suppliers (id) ON DELETE CASCADE
 );
+
+CREATE TABLE cart (
+    user_id INT,
+    product_id INT,
+    quantity INT,
+
+    PRIMARY KEY(user_id, product_id),
+
+    CONSTRAINT cart_users_fk FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT cart_products_fk FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
+);
+
+CREATE TABLE order_statuses (
+    id INT PRIMARY KEY,
+    status VARCHAR(15) NOT NULL
+);
+
+INSERT INTO order_statuses (id, status) VALUES
+(1, 'ACCEPTED'), (2, 'CONFIRMED'), (3, 'IN_PROCESS'), (4, 'SENT'), (5, 'COMPLETED'), (6, 'CANCELLED');
+
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    status_id INT DEFAULT 1,
+    time DATETIME,
+    status_description VARCHAR(300),
+
+    CONSTRAINT orders_users_fk FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT order_statuses_fk FOREIGN KEY (status_id) REFERENCES order_statuses (id)
+);
+
+CREATE TABLE orders_products (
+    order_id INT,
+    product_id INT,
+    quantity INT,
+    current_price DECIMAL(10, 2),
+
+    PRIMARY KEY(order_id, product_id),
+
+    CONSTRAINT orders_products_order_fk FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE,
+    CONSTRAINT orders_products_product_fk FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
+);
