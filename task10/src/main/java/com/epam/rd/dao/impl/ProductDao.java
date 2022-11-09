@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class ProductDao implements IProductDao {
-    private Product mapProduct(ResultSet resultSet) throws SQLException {
+    public static Product mapProduct(ResultSet resultSet) throws SQLException {
         Product product = new Product(
                 resultSet.getInt("products.id"),
                 resultSet.getString("products.name"),

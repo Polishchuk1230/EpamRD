@@ -3,21 +3,11 @@ package com.epam.rd.listener;
 import com.epam.rd.context.ApplicationContext;
 import com.epam.rd.context.util.BeanNames;
 import com.epam.rd.context.util.CaptchaStorageMethod;
-import com.epam.rd.dao.IProductDao;
-import com.epam.rd.dao.ISubscriptionDao;
-import com.epam.rd.dao.IUserDao;
-import com.epam.rd.dao.impl.ProductDao;
-import com.epam.rd.dao.impl.SubscriptionDao;
-import com.epam.rd.dao.impl.UserDaoMySQLImpl;
+import com.epam.rd.dao.*;
+import com.epam.rd.dao.impl.*;
 import com.epam.rd.entity.User;
-import com.epam.rd.service.ICaptchaService;
-import com.epam.rd.service.IProductService;
-import com.epam.rd.service.ISubscriptionService;
-import com.epam.rd.service.IUserService;
-import com.epam.rd.service.impl.CaptchaService;
-import com.epam.rd.service.impl.ProductService;
-import com.epam.rd.service.impl.SubscriptionService;
-import com.epam.rd.service.impl.UserService;
+import com.epam.rd.service.*;
+import com.epam.rd.service.impl.*;
 import com.epam.rd.strategy.ICaptchaStrategy;
 import com.epam.rd.strategy.impl.CookieCaptchaStrategy;
 import com.epam.rd.strategy.impl.HiddenTagCaptchaStrategy;
@@ -47,7 +37,7 @@ public class ApplicationContextInitializer implements ServletContextListener {
         // create the new ApplicationContext's instance
         ApplicationContext.create(servletContext);
 
-        // set up the ApplicationContext
+        // changeQuantity up the ApplicationContext
         ApplicationContext context = ApplicationContext.getInstance();
 
         List<User> users = new ArrayList<>(Arrays.asList(
@@ -83,5 +73,15 @@ public class ApplicationContextInitializer implements ServletContextListener {
         IProductDao productDao = new ProductDao();
         IProductService productService = new ProductService(productDao);
         context.setAttribute(BeanNames.PRODUCT_SERVICE, productService);
+
+        // CartService
+        ICartDao cartDao = new CartDao();
+        ICartService cartService = new CartService(cartDao);
+        context.setAttribute(BeanNames.CART_SERVICE, cartService);
+
+        // OrderService
+        IOrderDao orderDao = new OrderDao();
+        IOrderService orderService = new OrderService(orderDao);
+        context.setAttribute(BeanNames.ORDER_SERVICE, orderService);
     }
 }

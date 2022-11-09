@@ -1,5 +1,7 @@
 package com.epam.rd.entity;
 
+import java.util.Objects;
+
 public class Supplier {
     private int id;
     private String name;
@@ -30,5 +32,18 @@ public class Supplier {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Supplier supplier = (Supplier) o;
+        return getId() == supplier.getId() && Objects.equals(getName(), supplier.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName());
     }
 }

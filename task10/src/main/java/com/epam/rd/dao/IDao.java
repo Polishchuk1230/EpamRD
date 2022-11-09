@@ -19,6 +19,7 @@ public interface IDao {
             return function.apply(statement);
         }
         catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }

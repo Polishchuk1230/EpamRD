@@ -28,6 +28,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="product">Items</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="cart">Cart</a>
+            </li>
         </ul>
     </div>
 </nav>
