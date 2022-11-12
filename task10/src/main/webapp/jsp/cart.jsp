@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="my" uri="/myTags" %>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${pageContext.request.locale}">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
@@ -14,7 +15,8 @@
 <body>
 <!-- Navigation bar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="index.html">Logo</a>
+    <a class="navbar-brand" href="#"><fmt:message key="logo"/></a>
+    <jsp:include page="/jsp/changeLanguage.jsp" />
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -22,16 +24,16 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="index.jsp">Home</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}"><fmt:message key="home"/></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="reg">Registration</a>
+                <a class="nav-link" href="reg"><fmt:message key="registration"/></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="product">Items</a>
+                <a class="nav-link" href="products"><fmt:message key="products"/></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="cart">Cart <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="cart"><fmt:message key="cart"/> <span class="sr-only">(<fmt:message key="current"/>)</span></a>
             </li>
         </ul>
     </div>
