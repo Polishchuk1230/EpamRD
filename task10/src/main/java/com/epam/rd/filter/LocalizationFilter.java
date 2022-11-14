@@ -35,7 +35,8 @@ public class LocalizationFilter extends HttpFilter {
         if (req.getSession().getAttribute(currentLocaleStrKey) != null) {
             String currentLocaleStrValue = String.valueOf(
                     req.getSession().getAttribute(currentLocaleStrKey));
-            currentLocale = mapLocale(currentLocaleStrValue);
+            Locale locale = mapLocale(currentLocaleStrValue);
+            currentLocale = findAppropriateLocale(Collections.enumeration(List.of(locale)), availableLocales);
         }
         // set locale from user's browser preferences
         if (currentLocale == null) {
@@ -43,7 +44,8 @@ public class LocalizationFilter extends HttpFilter {
         }
         // set default locale
         if (currentLocale == null) {
-            currentLocale = mapLocale(getInitParameter("defaultLocale"));
+            Locale locale = mapLocale(getInitParameter("defaultLocale"));
+            currentLocale = findAppropriateLocale(Collections.enumeration(List.of(locale)), availableLocales);
         }
 
         req.getSession().setAttribute(currentLocaleStrKey, currentLocale);
