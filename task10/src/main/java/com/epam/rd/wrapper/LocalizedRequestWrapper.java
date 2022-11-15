@@ -1,15 +1,16 @@
-package com.epam.rd.filter.wrapper;
+package com.epam.rd.wrapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 
 public class LocalizedRequestWrapper extends HttpServletRequestWrapper {
     private Locale locale;
-    private Locale[] locales;
+    private List<Locale> locales;
 
     /**
      * Constructs a request object wrapping the given request.
@@ -17,7 +18,7 @@ public class LocalizedRequestWrapper extends HttpServletRequestWrapper {
      * @param request the {@link HttpServletRequest} to be wrapped.
      * @throws IllegalArgumentException if the request is null
      */
-    public LocalizedRequestWrapper(HttpServletRequest request, Locale locale, Locale[] locales) {
+    public LocalizedRequestWrapper(HttpServletRequest request, Locale locale, List<Locale> locales) {
         super(request);
         this.locale = locale;
         this.locales = locales;
@@ -35,7 +36,7 @@ public class LocalizedRequestWrapper extends HttpServletRequestWrapper {
 
             @Override
             public boolean hasMoreElements() {
-                return locales.length > counter;
+                return locales.size() > counter;
             }
 
             @Override
@@ -43,7 +44,7 @@ public class LocalizedRequestWrapper extends HttpServletRequestWrapper {
                 if (!hasMoreElements()) {
                     throw new NoSuchElementException();
                 }
-                return locales[counter++];
+                return locales.get(counter++);
             }
         };
     }

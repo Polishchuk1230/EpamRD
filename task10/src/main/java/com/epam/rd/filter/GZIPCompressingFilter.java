@@ -1,6 +1,6 @@
 package com.epam.rd.filter;
 
-import com.epam.rd.filter.wrapper.GZipResponseWrapper;
+import com.epam.rd.wrapper.GZipResponseWrapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpFilter;
@@ -16,7 +16,7 @@ public class GZIPCompressingFilter extends HttpFilter {
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         super.doFilter(req, res, chain);
         Enumeration<String> headers = req.getHeaders("Accept-Encoding");
-        if (headers.hasMoreElements() && isGZipAccepted(headers.nextElement().split(", "))) {
+        if (headers.hasMoreElements() && isGZipAccepted(headers.nextElement().split(","))) {
             res.addHeader("Content-Encoding", "gzip");
             GZipResponseWrapper gzipResponse = new GZipResponseWrapper(res);
             chain.doFilter(req, gzipResponse);

@@ -1,6 +1,6 @@
 package com.epam.rd.filter;
 
-import com.epam.rd.filter.wrapper.LocalizedRequestWrapper;
+import com.epam.rd.wrapper.LocalizedRequestWrapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpFilter;
@@ -11,23 +11,23 @@ import jakarta.servlet.jsp.jstl.core.Config;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class LocalizationFilter extends HttpFilter {
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         String currentLocaleStrKey = Config.FMT_LOCALE + ".session";
-        Locale[] availableLocales = Arrays.stream(getInitParameter("locales").split(", "))
-                .map(this::mapLocale)
-                .toArray(Locale[]::new);
+        List<Locale> availableLocales = Arrays.stream(getInitParameter("locales").split(", ?"))
+                .map(this::buildLocale)
+                .collect(Collectors.toList());
         Locale currentLocale = null;
 
         // put paramLocale to a storage
         String paramLocale = req.getParameter("locale");
-        if (paramLocale != null && findAppropriateLocale(Collections.enumeration(List.of(mapLocale(paramLocale))), availableLocales) != null) {
+        if (paramLocale != null && findAppropriateLocale(List.of(buildLocale(paramLocale)), availableLocales) != null) {
             req.getSession().setAttribute(currentLocaleStrKey, req.getParameter("locale"));
         }
 
@@ -35,17 +35,17 @@ public class LocalizationFilter extends HttpFilter {
         if (req.getSession().getAttribute(currentLocaleStrKey) != null) {
             String currentLocaleStrValue = String.valueOf(
                     req.getSession().getAttribute(currentLocaleStrKey));
-            Locale locale = mapLocale(currentLocaleStrValue);
-            currentLocale = findAppropriateLocale(Collections.enumeration(List.of(locale)), availableLocales);
+            Locale locale = buildLocale(currentLocaleStrValue);
+            currentLocale = findAppropriateLocale(List.of(locale), availableLocales);
         }
         // set locale from user's browser preferences
         if (currentLocale == null) {
-            currentLocale = findAppropriateLocale(req.getLocales(), availableLocales);
+            currentLocale = findAppropriateLocale(Collections.list(req.getLocales()), availableLocales);
         }
         // set default locale
         if (currentLocale == null) {
-            Locale locale = mapLocale(getInitParameter("defaultLocale"));
-            currentLocale = findAppropriateLocale(Collections.enumeration(List.of(locale)), availableLocales);
+            Locale locale = buildLocale(getInitParameter("defaultLocale"));
+            currentLocale = findAppropriateLocale(List.of(locale), availableLocales);
         }
 
         req.getSession().setAttribute(currentLocaleStrKey, currentLocale);
@@ -53,19 +53,14 @@ public class LocalizationFilter extends HttpFilter {
         super.doFilter(wrappedRequest, res, chain);
     }
 
-    private Locale findAppropriateLocale(Enumeration<Locale> requiredLocales, Locale[] availableLocales) {
-        while (requiredLocales.hasMoreElements()) {
-            Locale requiredLocale = requiredLocales.nextElement();
-            for (Locale availableLocale : availableLocales) {
-                if (availableLocale.equals(requiredLocale)) {
-                    return requiredLocale;
-                }
-            }
-        }
-        return null;
+    private Locale findAppropriateLocale(List<Locale> requiredLocales, List<Locale> availableLocales) {
+        return requiredLocales.stream()
+                .filter(availableLocales::contains)
+                .findFirst()
+                .orElse(null);
     }
 
-    private Locale mapLocale(String str) {
+    private Locale buildLocale(String str) {
         String language = str;
         String region = null;
 

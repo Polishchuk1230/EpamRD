@@ -1,4 +1,4 @@
-package com.epam.rd.filter.wrapper;
+package com.epam.rd.wrapper;
 
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,8 +9,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 public class GZipResponseWrapper extends HttpServletResponseWrapper {
-    private GZipServletOutputStream gzipOutputStream = null;
-    private PrintWriter printWriter      = null;
+    private GZipServletOutputStream gzipOutputStream;
+    private PrintWriter printWriter;
 
     public GZipResponseWrapper(HttpServletResponse response)
             throws IOException {
@@ -18,9 +18,6 @@ public class GZipResponseWrapper extends HttpServletResponseWrapper {
     }
 
     public void close() throws IOException {
-
-        // PrintWriter.close does not throw exceptions.
-        // Hence no try-catch block.
         if (this.printWriter != null) {
             this.printWriter.close();
         }
@@ -30,39 +27,17 @@ public class GZipResponseWrapper extends HttpServletResponseWrapper {
         }
     }
 
-
-    /**
-     * Flush OutputStream or PrintWriter
-     *
-     * @throws IOException
-     */
-
     @Override
     public void flushBuffer() throws IOException {
-
-        //PrintWriter.flush() does not throw exception
-        if(this.printWriter != null) {
+        if (this.printWriter != null) {
             this.printWriter.flush();
         }
 
-        IOException exception1 = null;
-        try{
-            if(this.gzipOutputStream != null) {
-                this.gzipOutputStream.flush();
-            }
-        } catch(IOException e) {
-            exception1 = e;
+        if(this.gzipOutputStream != null) {
+            this.gzipOutputStream.flush();
         }
 
-        IOException exception2 = null;
-        try {
-            super.flushBuffer();
-        } catch(IOException e){
-            exception2 = e;
-        }
-
-        if(exception1 != null) throw exception1;
-        if(exception2 != null) throw exception2;
+        super.flushBuffer();
     }
 
     @Override
@@ -87,12 +62,13 @@ public class GZipResponseWrapper extends HttpServletResponseWrapper {
         if (this.printWriter == null) {
             this.gzipOutputStream = new GZipServletOutputStream(
                     getResponse().getOutputStream());
-            this.printWriter      = new PrintWriter(new OutputStreamWriter(
-                    this.gzipOutputStream, getResponse().getCharacterEncoding()));
+            this.printWriter =
+                    new PrintWriter(
+                            new OutputStreamWriter(
+                                    this.gzipOutputStream, getResponse().getCharacterEncoding()));
         }
         return this.printWriter;
     }
-
 
     @Override
     public void setContentLength(int len) {

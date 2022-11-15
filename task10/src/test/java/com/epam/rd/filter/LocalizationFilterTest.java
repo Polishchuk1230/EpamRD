@@ -1,6 +1,5 @@
-package com.epam.rd;
+package com.epam.rd.filter;
 
-import com.epam.rd.filter.LocalizationFilter;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,17 +16,15 @@ import java.util.List;
 import java.util.Locale;
 
 public class LocalizationFilterTest {
-    private final String AVAILABLE_LOCALES_INIT_PARAMETER = "pl, en, uk";
+    private final String AVAILABLE_LOCALES_INIT_PARAMETER = "pl, en,uk";
     private final String CURRENT_LOCALE_ATTRIBUTE_NAME = Config.FMT_LOCALE + ".session";
     private final String CURRENT_LOCALE_VALUE_IN_STORAGE = "uk";
     private final String DEFAULT_LOCALE_INIT_PARAMETER = "en";
     private final String LOCALE_OF_BROWSER_VALUE = "pl";
-    private final Enumeration<Locale> LOCALES_OF_BROWSER;
-
-    {
-        Locale localeUk = new Locale.Builder().setLanguage(LOCALE_OF_BROWSER_VALUE).build();
-        LOCALES_OF_BROWSER = Collections.enumeration(List.of(localeUk));
-    }
+    private final Enumeration<Locale> LOCALES_OF_BROWSER =
+            Collections.enumeration(
+                    List.of(
+                            new Locale.Builder().setLanguage(LOCALE_OF_BROWSER_VALUE).build()));
 
     @Test
     public void useLocaleFromStorageTest() throws ServletException, IOException {
@@ -109,7 +106,7 @@ public class LocalizationFilterTest {
     }
 
     /**
-     * Fake FilterChain implementation designed to extract ServletRequest instance after processing by the tested filter
+     * FilterChain implementation designed to extract ServletRequest instance after processing by the tested filter
      */
     private class TestFilterChain implements FilterChain {
         private ServletRequest request;

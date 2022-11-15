@@ -1,4 +1,4 @@
-package com.epam.rd;
+package com.epam.rd.servlet;
 
 import com.epam.rd.context.ApplicationContext;
 import com.epam.rd.context.util.BeanNames;

@@ -1,4 +1,4 @@
-package com.epam.rd.filter.wrapper;
+package com.epam.rd.wrapper;
 
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.WriteListener;
