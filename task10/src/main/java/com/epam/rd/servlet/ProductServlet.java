@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static com.epam.rd.servlet.util.Parameters.*;
 
-@WebServlet("/product")
+@WebServlet("/products")
 public class ProductServlet extends HttpServlet {
     private static final String ITEMS_JSP = "jsp/items.jsp";
     private static final int DEFAULT_NUM_ITEMS_PER_PAGE = 10;

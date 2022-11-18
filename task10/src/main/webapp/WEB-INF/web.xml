@@ -18,6 +18,42 @@
 
   <context-param>
     <param-name>images</param-name>
-    <param-value>${user.home}${file.separator}Programming${file.separator}Soft${file.separator}tomcat${file.separator}images${file.separator}</param-value>
+    <param-value>${user.home}/Programming/Soft/tomcat/images/</param-value>
   </context-param>
+
+  <context-param>
+    <param-name>jakarta.servlet.jsp.jstl.fmt.localizationContext</param-name>
+    <param-value>locale</param-value>
+  </context-param>
+
+  <filter>
+    <filter-name>LocaleInitializeFilter</filter-name>
+    <filter-class>com.epam.rd.filter.LocalizationFilter</filter-class>
+    <init-param>
+      <param-name>locales</param-name>
+      <param-value>uk,en</param-value>
+    </init-param>
+    <init-param>
+      <param-name>defaultLocale</param-name>
+      <param-value>uk</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>LocaleInitializeFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>GZIPCompressingFilter</filter-name>
+    <filter-class>com.epam.rd.filter.GZIPCompressingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>GZIPCompressingFilter</filter-name>
+    <url-pattern>*.js</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>GZIPCompressingFilter</filter-name>
+    <url-pattern>*.html</url-pattern>
+  </filter-mapping>
+
 </web-app>
