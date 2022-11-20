@@ -1,0 +1,14 @@
+<security
+        xmlns="http://localhost:8080"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="/ SecurityXMLScheme.xsd">
+    <constraint>
+        <url-pattern>/products</url-pattern>
+        <role>USER</role>
+        <role>ADMIN</role>
+    </constraint>
+    <constraint>
+        <url-pattern>/cart</url-pattern>
+        <role>USER</role>
+    </constraint>
+</security>

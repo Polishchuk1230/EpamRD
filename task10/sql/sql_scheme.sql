@@ -12,6 +12,23 @@ CREATE TABLE users (
     avatar VARCHAR(500)
 );
 
+CREATE TABLE roles (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(10) NOT NULL UNIQUE
+);
+
+INSERT INTO roles (id, name) VALUES (1, 'ADMIN'), (2, 'USER'), (3, 'BANNED');
+
+CREATE TABLE users_roles (
+    user_id INT NOT NULL,
+    role_id INT NOT NULL,
+
+    PRIMARY KEY(user_id, role_id),
+
+    CONSTRAINT users_roles_user_fk FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT users_roles_role_fk FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE
+);
+
 CREATE TABLE subscriptions (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(20) NOT NULL UNIQUE
