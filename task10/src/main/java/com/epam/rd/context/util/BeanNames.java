@@ -19,5 +19,5 @@ public class BeanNames {
 
     public static final String ORDER_SERVICE = "orderService";
 
-    public static final String CONSTRAINTS = "constraints";
+    public static final String SECURITY_SERVICE = "security_service";
 }

@@ -3,6 +3,8 @@ package com.epam.rd.listener;
 import com.epam.rd.context.ApplicationContext;
 import com.epam.rd.context.util.BeanNames;
 import com.epam.rd.entity.Role;
+import com.epam.rd.service.ISecurityService;
+import com.epam.rd.service.impl.SecurityService;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import org.w3c.dom.Document;
@@ -56,7 +58,9 @@ public class SecurityXmlParserInitializer implements ServletContextListener {
                 }
             }
 
-            ApplicationContext.getInstance().setAttribute(BeanNames.CONSTRAINTS, constraints);
+            // SecurityService initialization
+            ISecurityService securityService = new SecurityService(constraints);
+            ApplicationContext.getInstance().setAttribute(BeanNames.SECURITY_SERVICE, securityService);
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();

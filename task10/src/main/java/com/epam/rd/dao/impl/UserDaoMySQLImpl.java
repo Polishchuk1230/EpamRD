@@ -22,10 +22,8 @@ public class UserDaoMySQLImpl implements IUserDao {
         user.setAvatar(resultSet.getString("users.avatar"));
 
         String roleString = resultSet.getString("roles.name");
-        if (roleString != null) {
-            user.setRole(
+        user.setRole(
                     Role.valueOf(roleString));
-        }
 
         return user;
     }
@@ -87,8 +85,7 @@ public class UserDaoMySQLImpl implements IUserDao {
     public User findById(int id) {
         String query = """
                 SELECT * FROM users
-                LEFT JOIN users_roles ON users.id = users_roles.user_id
-                LEFT JOIN roles ON roles.id = users_roles.role_id
+                JOIN roles ON roles.id = users.role_id
                 WHERE users.id = ?
                 """;
 
@@ -101,8 +98,7 @@ public class UserDaoMySQLImpl implements IUserDao {
     public User findByUsername(String username) {
         String query = """
                 SELECT * FROM users
-                LEFT JOIN users_roles ON users.id = users_roles.user_id
-                LEFT JOIN roles ON roles.id = users_roles.role_id
+                JOIN roles ON roles.id = users.role_id
                 WHERE users.username = ?
                 """;
 
@@ -115,8 +111,7 @@ public class UserDaoMySQLImpl implements IUserDao {
     public User findByEmail(String email) {
         String query = """
                 SELECT * FROM users
-                LEFT JOIN users_roles ON users.id = users_roles.user_id
-                LEFT JOIN roles ON roles.id = users_roles.role_id
+                JOIN roles ON roles.id = users.role_id
                 WHERE users.email = ?
                 """;
 
