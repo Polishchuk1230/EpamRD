@@ -25,19 +25,16 @@ public class SecurityFilter extends HttpFilter {
         String reqURI = req.getRequestURI().toLowerCase().substring(req.getRequestURI().lastIndexOf("/"));
         User user = (User) req.getSession().getAttribute("user");
 
-        if (securityService.isResourcePublic(reqURI)) {
-            // skip if-structure
-            // let it be doFilter()
-        }
-        // if the user isn't authenticated
-        else if (user == null) {
-            // redirect it to the login page
-            res.sendRedirect(req.getContextPath());
-            return;
-        }
-        else if (securityService.isAccessDenied(reqURI, user)) {
-            res.sendError(403, "You have not access to this page.");
-            return;
+        if (!securityService.isResourcePublic(reqURI)) {
+            if (user == null) {
+                // redirect them to the login page
+                res.sendRedirect(req.getContextPath());
+                return;
+            }
+            if (securityService.isAccessDenied(reqURI, user)) {
+                res.sendError(403, "You have not access to this page.");
+                return;
+            }
         }
 
         super.doFilter(req, res, chain);

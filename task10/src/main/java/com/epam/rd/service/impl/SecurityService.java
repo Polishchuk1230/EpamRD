@@ -16,17 +16,18 @@ public class SecurityService implements ISecurityService {
 
     @Override
     public boolean isResourcePublic(String reqURI) {
-        // static data is free to access
-        if (reqURI.endsWith(".js") || reqURI.endsWith(".css") || reqURI.endsWith("/img")) {
-            return true;
-        }
-
         // if the resource isn't mentioned in constraints it is open
         return constraints.keySet().stream().noneMatch(reqURI::equalsIgnoreCase);
     }
 
     @Override
     public boolean isAccessDenied(String reqURI, User user) {
+        if (isResourcePublic(reqURI)) {
+            return false;
+        } else if (user == null) {
+            return true;
+        }
+
         return !constraints.get(reqURI).contains(user.getRole());
     }
 }
