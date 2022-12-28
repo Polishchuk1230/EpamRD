@@ -2,6 +2,13 @@ CREATE DATABASE preproddb;
 
 USE preproddb;
 
+CREATE TABLE roles (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(10) NOT NULL UNIQUE
+);
+
+INSERT INTO roles (id, name) VALUES (1, 'ADMIN'), (2, 'USER');
+
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(15) NOT NULL UNIQUE,
@@ -9,7 +16,10 @@ CREATE TABLE users (
     surname VARCHAR(20),
     email VARCHAR(256) NOT NULL UNIQUE,
     password VARCHAR(32) NOT NULL,
-    avatar VARCHAR(500)
+    avatar VARCHAR(500),
+    role_id INT NOT NULL DEFAULT 2,
+
+    CONSTRAINT users_role_fk FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE
 );
 
 CREATE TABLE subscriptions (

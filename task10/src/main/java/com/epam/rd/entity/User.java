@@ -12,6 +12,7 @@ public class User implements Serializable {
     private String email;
     private String password;
     private String avatar;
+    private Role role = Role.USER;
     private List<Subscription> subscriptions = new ArrayList<>();
 
     public User() {
@@ -79,6 +80,14 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public List<Subscription> getSubscriptions() {

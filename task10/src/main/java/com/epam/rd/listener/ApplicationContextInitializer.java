@@ -15,14 +15,12 @@ import com.epam.rd.strategy.impl.SessionCaptchaStrategy;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.annotation.WebListener;
 
 import java.util.*;
 
 /**
  * A listener which initialize the ApplicationContext when the application starts.
  */
-@WebListener
 public class ApplicationContextInitializer implements ServletContextListener {
 
     @Override

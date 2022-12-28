@@ -1,6 +1,7 @@
 package com.epam.rd.dao.impl;
 
 import com.epam.rd.dao.IUserDao;
+import com.epam.rd.entity.Role;
 import com.epam.rd.entity.User;
 
 import java.sql.PreparedStatement;
@@ -19,6 +20,11 @@ public class UserDaoMySQLImpl implements IUserDao {
                 resultSet.getString("users.email"),
                 resultSet.getString("users.password"));
         user.setAvatar(resultSet.getString("users.avatar"));
+
+        String roleString = resultSet.getString("roles.name");
+        user.setRole(
+                    Role.valueOf(roleString));
+
         return user;
     }
 
@@ -77,7 +83,11 @@ public class UserDaoMySQLImpl implements IUserDao {
 
     @Override
     public User findById(int id) {
-        String query = "SELECT * FROM users WHERE users.id = ?";
+        String query = """
+                SELECT * FROM users
+                JOIN roles ON roles.id = users.role_id
+                WHERE users.id = ?
+                """;
 
         FunctionThrowsSQLExc<PreparedStatement, User> findById = findByFieldFunction(Integer.toString(id));
 
@@ -86,7 +96,11 @@ public class UserDaoMySQLImpl implements IUserDao {
 
     @Override
     public User findByUsername(String username) {
-        String query = "SELECT * FROM users WHERE users.username = ?";
+        String query = """
+                SELECT * FROM users
+                JOIN roles ON roles.id = users.role_id
+                WHERE users.username = ?
+                """;
 
         FunctionThrowsSQLExc<PreparedStatement, User> findByUsername = findByFieldFunction(username);
 
@@ -95,7 +109,11 @@ public class UserDaoMySQLImpl implements IUserDao {
 
     @Override
     public User findByEmail(String email) {
-        String query = "SELECT * FROM users WHERE users.email = ?";
+        String query = """
+                SELECT * FROM users
+                JOIN roles ON roles.id = users.role_id
+                WHERE users.email = ?
+                """;
 
         FunctionThrowsSQLExc<PreparedStatement, User> findByEmail = findByFieldFunction(email);
 
